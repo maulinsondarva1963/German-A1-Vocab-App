@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>German Vocabulary Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(-45deg, #0f172a, #3b0764, #1e1b4b, #020617);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f8fafc;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            color: #0f172a;
+        }
+        .menu-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4">
+
+    <div class="mb-10 text-center w-full max-w-md">
+        <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2 drop-shadow-md">
+            Deutsch A1 Flashcards
+        </h1>
+        <p class="text-gray-300 font-medium">Select a chapter to begin studying</p>
+    </div>
+
+    <div class="w-full max-w-md flex flex-col space-y-4">
+        
+        <a href="chapter1.html" class="menu-card p-5 flex items-center justify-between shadow-xl cursor-pointer hover:bg-gray-50">
+            <div>
+                <h2 class="text-xl font-bold text-gray-900">Kapitel 1</h2>
+                <p class="text-sm text-gray-500 font-medium mt-0.5">Guten Tag! (Greetings & Basics)</p>
+            </div>
+            <span class="text-2xl bg-blue-50 p-3 rounded-full">👋</span>
+        </a>
+
+        <a href="chapter2.html" class="menu-card p-5 flex items-center justify-between shadow-xl cursor-pointer hover:bg-gray-50">
+            <div>
+                <h2 class="text-xl font-bold text-gray-900">Kapitel 2</h2>
+                <p class="text-sm text-gray-500 font-medium mt-0.5">Freunde, Kollegen und ich</p>
+            </div>
+            <span class="text-2xl bg-purple-50 p-3 rounded-full">👥</span>
+        </a>
+
+        <a href="chapter3.html" class="menu-card p-5 flex items-center justify-between shadow-xl cursor-pointer hover:bg-gray-50">
+            <div>
+                <h2 class="text-xl font-bold text-gray-900">Kapitel 3</h2>
+                <p class="text-sm text-gray-500 font-medium mt-0.5">In der Stadt (Around the City)</p>
+            </div>
+            <span class="text-2xl bg-emerald-50 p-3 rounded-full">🏢</span>
+        </a>
+
+    </div>
+
+</body>
+</html>

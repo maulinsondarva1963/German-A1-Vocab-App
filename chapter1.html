@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>German A1 Vocab Mastery</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
+
+        :root {
+            --bg-color: #eeeeee;
+            --card-bg: #ffffff;
+            --text-dark: #292f36;
+            --text-muted: #888888;
+            --border-color: #e5e5e5;
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --tag-verb: #e2f2f0;
+            --tag-verb-text: #2d7a73;
+            --tag-noun: #e0f2fe;
+            --tag-noun-text: #0284c7;
+            --tag-adjective: #f3e8ff;
+            --tag-adjective-text: #6b21a8;
+            --tag-other: #f1f5f9;
+            --tag-other-text: #475569;
+            --tag-easy: #dcfce7;
+            --tag-easy-text: #15803d;
+            --tag-medium: #fef9c3;
+            --tag-medium-text: #a16207;
+            --tag-hard: #fee2e2;
+            --tag-hard-text: #b91c1c;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .app-container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 0 5px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 900;
+        }
+
+        .header .subtitle {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* NAVIGATION TABS */
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 2px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* CAPSULE FILTER PANEL */
+        .filter-panel {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+        .filter-row:last-child { margin-bottom: 0; }
+
+        .filter-label {
+            font-size: 0.72em;
+            font-weight: 900;
+            color: #94a3b8;
+            text-transform: uppercase;
+            width: 85px;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .filter-pill {
+            padding: 5px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            background: var(--card-bg);
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-pill.active {
+            background: #f1f5f9;
+            color: var(--text-dark);
+            border-color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        /* STATS COUNTER GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: #fdfdfd;
+            border-radius: 12px;
+            padding: 12px 5px;
+            text-align: center;
+            border: 1px solid #e8e8e8;
+        }
+
+        .stat-box .num {
+            font-size: 1.4em;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+        .stat-box .num.green { color: #10b981; }
+        .stat-box .num.red { color: #f43f5e; }
+
+        .stat-box .lbl {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* PANELS/SECTIONS */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* FLASHCARD STYLE */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            height: 250px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 20px;
+            text-align: center;
+            padding: 20px;
+            background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.01);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tag {
+            font-size: 0.7em;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .tag.verb { background: var(--tag-verb); color: var(--tag-verb-text); }
+        .tag.noun { background: var(--tag-noun); color: var(--tag-noun-text); }
+        .tag.adjective { background: var(--tag-adjective); color: var(--tag-adjective-text); }
+        .tag.other { background: var(--tag-other); color: var(--tag-other-text); }
+        .tag.easy { background: var(--tag-easy); color: var(--tag-easy-text); }
+        .tag.medium { background: var(--tag-medium); color: var(--tag-medium-text); }
+        .tag.hard { background: var(--tag-hard); color: var(--tag-hard-text); }
+
+        .card-main-text {
+            font-size: 1.8em;
+            font-weight: 700;
+            word-wrap: break-word;
+            max-width: 100%;
+            padding: 10px 0;
+        }
+        .card-back .card-main-text {
+            color: #4f46e5;
+        }
+
+        .card-footer-text {
+            font-size: 0.8em;
+            color: #94a3b8;
+        }
+
+        /* ACTION NAVIGATION BUTTONS */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: background 0.15s;
+            background: #e2e8f0;
+            color: var(--text-dark);
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn.success { background: #10b981; color: white; }
+        .btn.danger { background: #f43f5e; color: white; }
+
+        /* INTERACTIVE MCQ QUIZ AND SPEED MODES */
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+
+        .quiz-prompt {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-opt {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 0.95em;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+            color: var(--text-dark);
+            transition: all 0.15s;
+        }
+        .quiz-opt.correct { background: #dcfce7; border-color: #10b981; color: #15803d; }
+        .quiz-opt.wrong { background: #fee2e2; border-color: #f43f5e; color: #b91c1c; }
+
+        /* SPEED CLOCK HUD ELEMENTS */
+        .speed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--text-dark);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .timer-badge {
+            background: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .start-screen {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .filter-label { width: 75px; font-size: 0.7em; }
+            .card-main-text { font-size: 1.5em; }
+            .options-list { gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="header">
+        <div>
+            <h1 style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 8px; font-size: 0.7em;">De</span>
+                Netzwerk neu A1
+            </h1>
+            <div class="subtitle"><span id="total-pool-count">0</span> words total</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+        <button class="tab-btn" onclick="switchTab('speed')">Speed round</button>
+        <button class="tab-btn" onclick="switchTab('missed')">Missed</button>
+    </div>
+
+    <div class="filter-panel" id="filter-panel">
+        <div class="filter-row">
+            <div class="filter-label">Word Type</div>
+            <div class="filter-options">
+                <button class="filter-pill active" onclick="setWordTypeFilter('all', this)">All</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('verb', this)">Verbs</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('noun', this)">Nouns</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('adjective', this)">Adjectives</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('other', this)">Others</button>
+            </div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-label">Difficulty</div>
+            <div class="filter-options">
+                <button class="filter-pill active" onclick="setDifficultyFilter('all', this)">All</button>
+                <button class="filter-pill" onclick="setDifficultyFilter('easy', this)">Easy</button>
+                <button class="filter-pill" onclick="setDifficultyFilter('medium', this)">Medium</button>
+                <button class="filter-pill" onclick="setDifficultyFilter('hard', this)">Hard</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid" id="stats-grid">
+        <div class="stat-box">
+            <div class="num" id="stat-reviewed">0/0</div>
+            <div class="lbl">reviewed</div>
+        </div>
+        <div class="stat-box">
+            <div class="num green" id="stat-knew">0</div>
+            <div class="lbl">knew it</div>
+        </div>
+        <div class="stat-box">
+            <div class="num red" id="stat-missed-count">0</div>
+            <div class="lbl">missed</div>
+        </div>
+    </div>
+
+    <div id="flashcards" class="section active">
+        <div id="fc-deck-container">
+            <div class="flashcard-wrapper" onclick="flipCard()">
+                <div class="flashcard" id="fc-anim-target">
+                    <div class="card-face card-front">
+                        <div class="card-tags">
+                            <span class="tag" id="fc-tag-type">type</span>
+                            <span class="tag" id="fc-tag-diff">diff</span>
+                        </div>
+                        <div class="card-main-text" id="fc-front-text">Wort</div>
+                        <div class="card-footer-text">tap to reveal</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-tags">
+                            <span class="tag" id="fc-tag-type-b">type</span>
+                        </div>
+                        <div class="card-main-text" id="fc-back-text">Meaning</div>
+                        <div class="card-footer-text">Tap to see translation</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-row">
+                <button class="btn" style="background:#eef2f6; border:1px solid #cbd5e1" onclick="prevCard()">← Back</button>
+                <button class="btn" style="background:#eef2f6; border:1px solid #cbd5e1" onclick="skipCard()">Next →</button>
+            </div>
+            
+            <div class="action-row">
+                <button class="btn danger" onclick="markCardMissed()">❌ Missed</button>
+                <button class="btn success" onclick="markCardKnew()">✓ Knew It</button>
+            </div>
+
+            <div class="action-row">
+                <button class="btn" style="background:#f1f5f9; color:#64748b; font-size:0.88em; padding:10px; border:1px dashed #cbd5e1;" onclick="resetVocabularyProgress()">🔄 Reset Progress</button>
+            </div>
+        </div>
+        <div id="fc-empty-state" class="empty-message" style="display:none;">
+            No words match your selected filters. Try broadening your selection!
+        </div>
+    </div>
+
+    <div id="quiz" class="section">
+        <div id="quiz-game-container" class="quiz-card">
+            <div class="quiz-prompt">What does "<span id="quiz-word" style="color:var(--primary);">Wort</span>" mean?</div>
+            <div class="options-list" id="quiz-options">
+                </div>
+            <button class="btn" id="quiz-next-btn" style="margin-top:20px; display:none;" onclick="initQuizQuestion()">Next Word →</button>
+        </div>
+        <div id="quiz-empty-state" class="empty-message" style="display:none;">
+            No words available to generate a quiz. Check your filters!
+        </div>
+    </div>
+
+    <div id="speed" class="section">
+        <div id="speed-start-panel" class="start-screen">
+            <h2>⏱️ Speed Round Challenge</h2>
+            <p style="color:var(--text-muted); margin-bottom:25px;">Race against the clock! Answer as many words as you can in 30 seconds.</p>
+            <button class="btn success" style="max-width:200px; margin:0 auto;" onclick="startSpeedRound()">Start Speed Run</button>
+        </div>
+        <div id="speed-game-panel" class="quiz-card" style="display:none;">
+            <div class="speed-header">
+                <div>Score: <span id="speed-score">0</span></div>
+                <div class="timer-badge">Time: <span id="speed-timer">30</span>s</div>
+            </div>
+            <div class="quiz-prompt" style="font-size:1.4em;">"<span id="speed-word">Wort</span>"</div>
+            <div class="options-list" id="speed-options">
+                </div>
+        </div>
+    </div>
+
+    <div id="missed" class="section">
+        <div id="missed-deck-container">
+            <p style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-bottom:12px;">Reviewing words you recently marked as missed or failed.</p>
+            <div class="flashcard-wrapper" onclick="flipMissedCard()">
+                <div class="flashcard" id="missed-anim-target">
+                    <div class="card-face card-front">
+                        <div class="card-tags">
+                            <span class="tag" id="m-tag-type">type</span>
+                            <span class="tag" id="m-tag-diff">diff</span>
+                        </div>
+                        <div class="card-main-text" id="m-front-text">Wort</div>
+                        <div class="card-footer-text">tap to reveal</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-tags">
+                            <span class="tag" id="m-tag-type-b">type</span>
+                        </div>
+                        <div class="card-main-text" id="m-back-text">Meaning</div>
+                        <div class="card-footer-text">Tap to see translation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="action-row">
+                <button class="btn" style="background:#f1f5f9; border:1px solid #cbd5e1;" onclick="nextMissedCard()">Keep in List</button>
+                <button class="btn success" onclick="clearFromMissed()">Mastered & Clear</button>
+            </div>
+        </div>
+        <div id="missed-empty-state" class="empty-message">
+            🎉 Nice! Your missed words tray is completely clear!
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // COMPLETE DICTIONARY GLOSSARY MAPPED FROM USER PROVIDED IMAGES (1a TO kurz und klar)
+    const database = [
+        // --- 1a & 1b & 1c ---
+        { de: "Bulgarisch", en: "Bulgarian", type: "adjective", difficulty: "easy" },
+        { de: "Deutsch", en: "German (I speak German.)", type: "adjective", difficulty: "easy" },
+        { de: "Englisch", en: "English", type: "adjective", difficulty: "easy" },
+        { de: "gut", en: "good (Guten Tag!)", type: "adjective", difficulty: "easy" },
+        { de: "guten Tag", en: "Good day! Hello!", type: "other", difficulty: "easy" },
+        { de: "Indonesisch", en: "Indonesian", type: "adjective", difficulty: "medium" },
+        { de: "international", en: "international", type: "adjective", difficulty: "easy" },
+        { de: "Italienisch", en: "Italian", type: "adjective", difficulty: "easy" },
+        { de: "Japanisch", en: "Japanese", type: "adjective", difficulty: "medium" },
+        { de: "Russisch", en: "Russian", type: "adjective", difficulty: "easy" },
+        { de: "Serbisch", en: "Serbian", type: "adjective", difficulty: "medium" },
+        { de: "Sie", en: "you (formal) (Match.)", type: "other", difficulty: "easy" },
+        { de: "Türkisch", en: "Turkish", type: "adjective", difficulty: "easy" },
+        { de: "Ungarisch", en: "Hungarian", type: "adjective", difficulty: "hard" },
+        { de: "was", en: "what? (What is that?)", type: "other", difficulty: "easy" },
+        { de: "zu|ordnen", en: "to assign, to match", type: "verb", difficulty: "medium" },
+        { de: "zusammen|gehören", en: "to fit together", type: "verb", difficulty: "hard" },
+        { de: "die Autobahn, -en", en: "highway", type: "noun", difficulty: "easy" },
+        { de: "das Butterbrot, -e", en: "sandwich", type: "noun", difficulty: "medium" },
+        { de: "das Würstchen, - / das Würstel, -", en: "sausage", type: "noun", difficulty: "hard" },
+        { de: "der Kindergarten, -", en: "kindergarten", type: "noun", difficulty: "medium" },
+        { de: "die Flasche, -n", en: "bottle", type: "noun", difficulty: "easy" },
+        { de: "das Handtuch, \"-er", en: "towel", type: "noun", difficulty: "medium" },
+        { de: "der Koffer, -", en: "suitcase", type: "noun", difficulty: "easy" },
+        { de: "der/die Kranke, -n", en: "sick person", type: "noun", difficulty: "medium" },
+        { de: "die Nudel, -n", en: "noodle", type: "noun", difficulty: "easy" },
+        { de: "auf", en: "in (\"Sausage\" in Italian is called \"wurstel\".)", type: "other", difficulty: "easy" },
+        { de: "heißen", en: "to be called", type: "verb", difficulty: "easy" },
+        { de: "Ihr, Ihre", en: "your", type: "other", difficulty: "easy" },
+        { de: "in (+ D.)", en: "in", type: "other", difficulty: "easy" },
+        { de: "Spanisch", en: "Spanish", type: "adjective", difficulty: "easy" },
+        { de: "die Sprache, -n", en: "language", type: "noun", difficulty: "easy" },
+        { de: "wie", en: "what / how", type: "other", difficulty: "easy" },
+        { de: "das Wort, \"-er", en: "word", type: "noun", difficulty: "easy" },
+        { de: "andere, anderer", en: "other", type: "adjective", difficulty: "easy" },
+
+        // --- Hallo! Tschüs! & 2a, 2b, 2c ---
+        { de: "ein, eine", en: "a", type: "other", difficulty: "easy" },
+        { de: "kennen", en: "to know", type: "verb", difficulty: "medium" },
+        { de: "das Kursplakat, -e", en: "course poster", type: "noun", difficulty: "medium" },
+        { de: "machen", en: "to make", type: "verb", difficulty: "easy" },
+        { de: "sammeln", en: "to collect", type: "verb", difficulty: "medium" },
+        { de: "und", en: "and", type: "other", difficulty: "easy" },
+        { de: "auch", en: "also", type: "other", difficulty: "easy" },
+        { de: "bis bald", en: "see you soon", type: "other", difficulty: "easy" },
+        { de: "ciao", en: "bye", type: "other", difficulty: "easy" },
+        { de: "danke", en: "thank you", type: "other", difficulty: "easy" },
+        { de: "dir", en: "you (dat.)", type: "other", difficulty: "easy" },
+        { de: "du", en: "you", type: "other", difficulty: "easy" },
+        { de: "die Entschuldigung, -en", en: "apology / to be sorry", type: "noun", difficulty: "hard" },
+        { de: "ganz", en: "pretty / quite / whole", type: "adjective", difficulty: "medium" },
+        { de: "gehen", en: "to go / how's it going", type: "verb", difficulty: "easy" },
+        { de: "hallo", en: "hello", type: "other", difficulty: "easy" },
+        { de: "hören", en: "to hear", type: "verb", difficulty: "easy" },
+        { de: "ich", en: "I", type: "other", difficulty: "easy" },
+        { de: "lesen", en: "to read", type: "verb", difficulty: "easy" },
+        { de: "die Person, -en", en: "person", type: "noun", difficulty: "easy" },
+        { de: "sehr", en: "very", type: "other", difficulty: "easy" },
+        { de: "sein", en: "to be", type: "verb", difficulty: "easy" },
+        { de: "tschüs", en: "bye", type: "other", difficulty: "easy" },
+        { de: "wer", en: "who?", type: "other", difficulty: "easy" },
+        { de: "die Situation, -en", en: "situation", type: "noun", difficulty: "medium" },
+        { de: "spielen", en: "to play", type: "verb", difficulty: "easy" },
+        { de: "bekannt", en: "well-known", type: "adjective", difficulty: "medium" },
+        { de: "der Name, -n", en: "name", type: "noun", difficulty: "easy" },
+        { de: "oder", en: "or", type: "other", difficulty: "easy" },
+        { de: "auf Wiedersehen", en: "goodbye", type: "other", difficulty: "medium" },
+        { de: "das", en: "this", type: "other", difficulty: "easy" },
+        { de: "es", en: "it", type: "other", difficulty: "easy" },
+        { de: "Frau", en: "Miss, Mrs, Ms", type: "noun", difficulty: "easy" },
+        { de: "gute Nacht", en: "good night", type: "other", difficulty: "easy" },
+        { de: "guten Abend", en: "good evening", type: "other", difficulty: "easy" },
+
+        // --- Guten Tag! Auf Wiedersehen! & 3b, 4a, 4b, 4c, 5a, 5b ---
+        { de: "guten Morgen", en: "good morning", type: "other", difficulty: "easy" },
+        { de: "Herr", en: "Mr", type: "noun", difficulty: "easy" },
+        { de: "Ihnen", en: "you (formal, dat.)", type: "other", difficulty: "easy" },
+        { de: "mein, meine", en: "my", type: "other", difficulty: "easy" },
+        { de: "formell", en: "formal", type: "adjective", difficulty: "easy" },
+        { de: "informell", en: "informal", type: "adjective", difficulty: "easy" },
+        { de: "der Nachname, -n", en: "last name", type: "noun", difficulty: "medium" },
+        { de: "das Personalpronomen, -", en: "personal pronoun", type: "noun", difficulty: "hard" },
+        { de: "das Verb, -en", en: "verb", type: "noun", difficulty: "easy" },
+        { de: "der Vorname, -n", en: "first name", type: "noun", difficulty: "easy" },
+        { de: "die Antwort, -en", en: "answer", type: "noun", difficulty: "easy" },
+        { de: "aus", en: "from", type: "other", difficulty: "easy" },
+        { de: "Deutschland", en: "Germany", type: "noun", difficulty: "easy" },
+        { de: "kommen", en: "to come from", type: "verb", difficulty: "easy" },
+        { de: "der Reiseführer, - / die Reiseführerin, -nen", en: "travel guide (m/f)", type: "noun", difficulty: "hard" },
+        { de: "sprechen", en: "to speak", type: "verb", difficulty: "easy" },
+        { de: "das Telefon, -e", en: "telephone", type: "noun", difficulty: "easy" },
+        { de: "welche, welcher", en: "which", type: "other", difficulty: "medium" },
+        { de: "wo", en: "where", type: "other", difficulty: "easy" },
+        { de: "woher", en: "from where", type: "other", difficulty: "easy" },
+        { de: "wohnen", en: "to live", type: "verb", difficulty: "easy" },
+        { de: "der Aussagesatz, \"-e", en: "declarative sentence", type: "noun", difficulty: "hard" },
+        { de: "der", en: "the", type: "other", difficulty: "easy" },
+        { de: "das Interview, -s", en: "interview", type: "noun", difficulty: "easy" },
+        { de: "variieren", en: "to vary", type: "verb", difficulty: "hard" },
+        { de: "die W-Frage, -n", en: "w-question", type: "noun", difficulty: "medium" },
+        { de: "er", en: "he", type: "other", difficulty: "easy" },
+        { de: "ergänzen", en: "to complete", type: "verb", difficulty: "medium" },
+        { de: "sie", en: "she", type: "other", difficulty: "easy" },
+        { de: "notieren", en: "to note", type: "verb", difficulty: "medium" },
+        { de: "zwei", en: "two", type: "other", difficulty: "easy" },
+        { de: "der Partner, - / die Partnerin, -nen", en: "partner (m/f)", type: "noun", difficulty: "medium" },
+        { de: "raten", en: "to guess", type: "verb", difficulty: "medium" },
+        { de: "vor|stellen", en: "to introduce", type: "verb", difficulty: "hard" },
+        { de: "acht", en: "eight", type: "other", difficulty: "easy" },
+        { de: "achtzehn", en: "eighteen", type: "other", difficulty: "medium" },
+        { de: "der Buchstabe, -n", en: "letter", type: "noun", difficulty: "medium" },
+        { de: "dann", en: "then", type: "other", difficulty: "easy" },
+        { de: "drei", en: "three", type: "other", difficulty: "easy" },
+
+        // --- Zahlen und Buchstaben & 6b, 6c, 7a, 7b, 7c ---
+        { de: "dreizehn", en: "thirteen", type: "other", difficulty: "medium" },
+        { de: "eins", en: "one", type: "other", difficulty: "easy" },
+        { de: "elf", en: "eleven", type: "other", difficulty: "easy" },
+        { de: "fünf", en: "five", type: "other", difficulty: "easy" },
+        { de: "fünfzehn", en: "fifteen", type: "other", difficulty: "medium" },
+        { de: "laut", en: "loud", type: "adjective", difficulty: "easy" },
+        { de: "mit|sprechen", en: "to speak along", type: "verb", difficulty: "medium" },
+        { de: "neun", en: "nine", type: "other", difficulty: "easy" },
+        { de: "neunzehn", en: "nineteen", type: "other", difficulty: "medium" },
+        { de: "null", en: "zero", type: "other", difficulty: "easy" },
+        { de: "sechs", en: "six", type: "other", difficulty: "easy" },
+        { de: "sechzehn", en: "sixteen", type: "other", difficulty: "medium" },
+        { de: "sieben", en: "seven", type: "other", difficulty: "easy" },
+        { de: "siebzehn", en: "seventeen", type: "other", difficulty: "medium" },
+        { de: "vier", en: "four", type: "other", difficulty: "easy" },
+        { de: "vierzehn", en: "fourteen", type: "other", difficulty: "medium" },
+        { de: "die Zahl, -en", en: "number", type: "noun", difficulty: "easy" },
+        { de: "zehn", en: "ten", type: "other", difficulty: "easy" },
+        { de: "zwanzig", en: "twenty", type: "other", difficulty: "medium" },
+        { de: "zwölf", en: "twelve", type: "other", difficulty: "medium" },
+        { de: "die Handynummer, -n", en: "mobile phone number", type: "noun", difficulty: "medium" },
+        { de: "dein, deine", en: "your", type: "other", difficulty: "easy" },
+        { de: "fragen", en: "to ask", type: "verb", difficulty: "easy" },
+        { de: "nach", en: "about", type: "other", difficulty: "easy" },
+        { de: "die Telefonnummer, -n", en: "telephone number", type: "noun", difficulty: "medium" },
+        { de: "das Alphabet, -e", en: "alphabet", type: "noun", difficulty: "easy" },
+        { de: "mit|lesen", en: "to read along", type: "verb", difficulty: "medium" },
+        { de: "zuerst", en: "at first", type: "other", difficulty: "medium" },
+        { de: "die E-Mail-Adresse, -n", en: "email address", type: "noun", difficulty: "medium" },
+        { de: "das Gespräch, -e", en: "conversation", type: "noun", difficulty: "medium" },
+        { de: "man", en: "one", type: "other", difficulty: "easy" },
+        { de: "minus", en: "minus", type: "other", difficulty: "easy" },
+        { de: "der Punkt, -e", en: "period", type: "noun", difficulty: "medium" },
+        { de: "sagen", en: "to say", type: "verb", difficulty: "easy" },
+        { de: "schreiben", en: "to write", type: "verb", difficulty: "easy" },
+        { de: "der Unterstrich, -e", en: "underscore", type: "noun", difficulty: "hard" },
+        { de: "bitte", en: "please", type: "other", difficulty: "easy" },
+        { de: "buchstabieren", en: "to spell", type: "verb", difficulty: "hard" },
+        { de: "der Dialog, -e", en: "dialogue", type: "noun", difficulty: "medium" },
+        { de: "ein bisschen", en: "a little", type: "other", difficulty: "easy" },
+        { de: "langsam", en: "slow", type: "adjective", difficulty: "easy" },
+        { de: "nicht", en: "not", type: "other", difficulty: "easy" },
+        { de: "noch einmal", en: "once more", type: "other", difficulty: "easy" },
+        { de: "verstehen", en: "to understand", type: "verb", difficulty: "medium" },
+
+        // --- Länder und Sprachen & 8a, 8b, 8c, 8e & kurz und klar ---
+        { de: "Algerien", en: "Algeria", type: "noun", difficulty: "medium" },
+        { de: "Arabisch", en: "Arabic", type: "adjective", difficulty: "easy" },
+        { de: "Brasilien", en: "Brasil", type: "noun", difficulty: "easy" },
+        { de: "Französisch", en: "French", type: "adjective", difficulty: "medium" },
+        { de: "Japan", en: "Japan", type: "noun", difficulty: "easy" },
+        { de: "das Land, \"-er", en: "country", type: "noun", difficulty: "easy" },
+        { de: "lernen", en: "to learn", type: "verb", difficulty: "easy" },
+        { de: "Österreich", en: "Austria", type: "noun", difficulty: "medium" },
+        { de: "Portugiesisch", en: "Portuguese", type: "adjective", difficulty: "hard" },
+        { de: "die Schweiz", en: "Switzerland", type: "noun", difficulty: "easy" },
+        { de: "sie (Pl.)", en: "they", type: "other", difficulty: "easy" },
+        { de: "die Tabelle, -n", en: "table, chart", type: "noun", difficulty: "easy" },
+        { de: "die USA", en: "USA", type: "noun", difficulty: "medium" },
+        { de: "Frankreich", en: "France", type: "noun", difficulty: "easy" },
+        { de: "Griechenland", en: "Greece", type: "noun", difficulty: "hard" },
+        { de: "Italien", en: "Italy", type: "noun", difficulty: "easy" },
+        { de: "Mexiko", en: "Mexico", type: "noun", difficulty: "easy" },
+        { de: "Portugal", en: "Portugal", type: "noun", difficulty: "medium" },
+        { de: "Thailand", en: "Thailand", type: "noun", difficulty: "easy" },
+        { de: "Polen", en: "Poland", type: "noun", difficulty: "easy" },
+        { de: "Polnisch", en: "Polish", type: "adjective", difficulty: "easy" },
+        { de: "Rätoromanisch", en: "Raetho-Romanic", type: "adjective", difficulty: "hard" },
+        { de: "Russland", en: "Russia", type: "noun", difficulty: "easy" },
+        { de: "Spanien", en: "Spain", type: "noun", difficulty: "easy" },
+        { de: "die Türkei", en: "Turkey", type: "noun", difficulty: "medium" },
+        { de: "die Ukraine", en: "Ukraine", type: "noun", difficulty: "hard" },
+        { de: "zu", en: "as", type: "other", difficulty: "easy" },
+        { de: "zweit", en: "pair / second", type: "other", difficulty: "easy" },
+        { de: "kurz", en: "short", type: "adjective", difficulty: "easy" },
+        { de: "die Stadt, \"-e", en: "city", type: "noun", difficulty: "easy" },
+        { de: "der Text, -e", en: "text", type: "noun", difficulty: "easy" },
+        { de: "das Befinden", en: "condition", type: "noun", difficulty: "medium" },
+        { de: "darauf", en: "upon", type: "other", difficulty: "medium" },
+        { de: "die Grammatik, -en", en: "grammar", type: "noun", difficulty: "medium" },
+        { de: "grüßen", en: "to greet", type: "verb", difficulty: "easy" },
+        { de: "reagieren", en: "to react", type: "verb", difficulty: "medium" },
+        { de: "das Redemittel, -", en: "useful phrases", type: "noun", difficulty: "hard" },
+        { de: "das Subjekt, -e", en: "subject", type: "noun", difficulty: "medium" },
+        { de: "über", en: "about", type: "other", difficulty: "easy" },
+        { de: "verabschieden", en: "to say goodbye", type: "verb", difficulty: "hard" },
+        { de: "das W-Wort, \"-er", en: "w-word", type: "noun", difficulty: "medium" }
+    ];
+
+    let currentTab = "flashcards";
+    let filterType = "all";
+    let filterDiff = "all";
+    
+    let filteredPool = [];
+    let activeCardIndex = 0;
+    
+    let totalReviewedCount = 0;
+    let knewItCount = 0;
+    let missedArray = [];
+    let currentMissedIndex = 0;
+
+    let speedTimerInterval = null;
+    let speedTimeLeft = 30;
+    let speedScoreValue = 0;
+    let speedCurrentWord = null;
+
+    window.onload = () => {
+        document.getElementById("total-pool-count").innerText = database.length;
+        applyFilters();
+    };
+
+    function switchTab(tabId) {
+        currentTab = tabId;
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+
+        const filterPanel = document.getElementById("filter-panel");
+        const statsPanel = document.getElementById("stats-grid");
+
+        clearInterval(speedTimerInterval);
+
+        if (tabId === "speed") {
+            filterPanel.style.display = "none";
+            statsPanel.style.display = "none";
+            resetSpeedRoundUI();
+        } else if (tabId === "missed") {
+            filterPanel.style.display = "none";
+            statsPanel.style.display = "none";
+            initMissedTrayView();
+        } else {
+            filterPanel.style.display = "block";
+            statsPanel.style.display = "grid";
+            applyFilters();
+            if (tabId === "quiz") initQuizQuestion();
+        }
+    }
+
+    function setWordTypeFilter(type, element) {
+        setSelectedPill(element);
+        filterType = type;
+        applyFilters();
+    }
+
+    function setDifficultyFilter(diff, element) {
+        setSelectedPill(element);
+        filterDiff = diff;
+        applyFilters();
+    }
+
+    function setSelectedPill(el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function applyFilters() {
+        filteredPool = database.filter(item => {
+            const matchesType = (filterType === "all" || item.type === filterType);
+            const matchesDiff = (filterDiff === "all" || item.difficulty === filterDiff);
+            return matchesType && matchesDiff;
+        });
+
+        activeCardIndex = 0;
+        updateGlobalStatsDashboard();
+
+        if (currentTab === "flashcards") {
+            renderFlashcardView();
+        } else if (currentTab === "quiz") {
+            initQuizQuestion();
+        }
+    }
+
+    function updateGlobalStatsDashboard() {
+        document.getElementById("stat-reviewed").innerText = `${totalReviewedCount}/${filteredPool.length}`;
+        document.getElementById("stat-knew").innerText = knewItCount;
+        document.getElementById("stat-missed-count").innerText = missedArray.length;
+    }
+
+    function renderFlashcardView() {
+        const deckContainer = document.getElementById("fc-deck-container");
+        const emptyState = document.getElementById("fc-empty-state");
+        
+        if (filteredPool.length === 0) {
+            deckContainer.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        deckContainer.style.display = "block";
+        emptyState.style.display = "none";
+
+        const item = filteredPool[activeCardIndex];
+        document.getElementById("fc-anim-target").classList.remove("flipped");
+
+        const typeTag = document.getElementById("fc-tag-type");
+        const diffTag = document.getElementById("fc-tag-diff");
+        const typeTagB = document.getElementById("fc-tag-type-b");
+
+        typeTag.innerText = item.type;
+        typeTag.className = `tag ${item.type}`;
+        typeTagB.innerText = item.type;
+        typeTagB.className = `tag ${item.type}`;
+
+        diffTag.innerText = item.difficulty;
+        diffTag.className = `tag ${item.difficulty}`;
+
+        document.getElementById("fc-front-text").innerText = item.de;
+        document.getElementById("fc-back-text").innerText = item.en;
+    }
+
+    function flipCard() {
+        document.getElementById("fc-anim-target").classList.toggle("flipped");
+    }
+
+    function prevCard() {
+        if (filteredPool.length === 0) return;
+        activeCardIndex = (activeCardIndex - 1 + filteredPool.length) % filteredPool.length;
+        updateGlobalStatsDashboard();
+        renderFlashcardView();
+    }
+
+    function advanceDeckNextPointer() {
+        if (filteredPool.length === 0) return;
+        activeCardIndex = (activeCardIndex + 1) % filteredPool.length;
+        totalReviewedCount++;
+        updateGlobalStatsDashboard();
+        renderFlashcardView();
+    }
+
+    function skipCard() {
+        advanceDeckNextPointer();
+    }
+
+    function markCardKnew() {
+        knewItCount++;
+        advanceDeckNextPointer();
+    }
+
+    function markCardMissed() {
+        const currentItem = filteredPool[activeCardIndex];
+        if (!missedArray.some(item => item.de === currentItem.de)) {
+            missedArray.push(currentItem);
+        }
+        advanceDeckNextPointer();
+    }
+
+    function resetVocabularyProgress() {
+        if (confirm("Are you sure you want to completely reset your progress metrics and missed words tray?")) {
+            totalReviewedCount = 0;
+            knewItCount = 0;
+            missedArray = [];
+            activeCardIndex = 0;
+            applyFilters();
+        }
+    }
+
+    function initQuizQuestion() {
+        const gameContainer = document.getElementById("quiz-game-container");
+        const emptyState = document.getElementById("quiz-empty-state");
+        const nextBtn = document.getElementById("quiz-next-btn");
+
+        if (filteredPool.length === 0) {
+            gameContainer.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        gameContainer.style.display = "block";
+        emptyState.style.display = "none";
+        nextBtn.style.display = "none";
+
+        const targetItem = filteredPool[Math.floor(Math.random() * filteredPool.length)];
+        document.getElementById("quiz-word").innerText = targetItem.de;
+
+        let options = [targetItem.en];
+        while (options.length < 4 && options.length < database.length) {
+            let randEn = database[Math.floor(Math.random() * database.length)].en;
+            if (!options.includes(randEn)) options.push(randEn);
+        }
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsBox = document.getElementById("quiz-options");
+        optionsBox.innerHTML = "";
+
+        options.forEach(opt => {
+            const button = document.createElement("button");
+            button.className = "quiz-opt";
+            button.innerText = opt;
+            button.onclick = () => evaluateQuizSelection(button, opt, targetItem.en, ".quiz-opt", "quiz-next-btn", true);
+            optionsBox.appendChild(button);
+        });
+    }
+
+    function evaluateQuizSelection(selectedBtn, chosenValue, correctValue, classTarget, nextBtnId, trackMissedFlag) {
+        const allButtons = document.querySelectorAll(classTarget);
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (chosenValue === correctValue) {
+            selectedBtn.classList.add("correct");
+            if (!trackMissedFlag) speedScoreValue += 2; 
+        } else {
+            selectedBtn.classList.add("wrong");
+            allButtons.forEach(btn => {
+                if (btn.innerText === correctValue) btn.classList.add("correct");
+            });
+
+            if (trackMissedFlag) {
+                const missingObj = database.find(i => i.en === correctValue);
+                if (missingObj && !missedArray.some(m => m.de === missingObj.de)) {
+                    missedArray.push(missingObj);
+                }
+            } else {
+                speedTimeLeft = Math.max(0, speedTimeLeft - 3);
+                document.getElementById("speed-timer").innerText = speedTimeLeft;
+            }
+        }
+
+        const nextControl = document.getElementById(nextBtnId);
+        if (nextControl) nextControl.style.display = "block";
+        if (!nextBtnId) {
+            setTimeout(() => { if (speedTimeLeft > 0) processNextSpeedItem(); }, 800);
+        }
+    }
+
+    function resetSpeedRoundUI() {
+        document.getElementById("speed-start-panel").style.display = "block";
+        document.getElementById("speed-game-panel").style.display = "none";
+    }
+
+    function startSpeedRound() {
+        document.getElementById("speed-start-panel").style.display = "none";
+        document.getElementById("speed-game-panel").style.display = "block";
+
+        speedTimeLeft = 30;
+        speedScoreValue = 0;
+        document.getElementById("speed-score").innerText = speedScoreValue;
+        document.getElementById("speed-timer").innerText = speedTimeLeft;
+
+        processNextSpeedItem();
+
+        speedTimerInterval = setInterval(() => {
+            speedTimeLeft--;
+            document.getElementById("speed-timer").innerText = speedTimeLeft;
+
+            if (speedTimeLeft <= 0) {
+                clearInterval(speedTimerInterval);
+                concludeSpeedSession();
+            }
+        }, 1000);
+    }
+
+    function processNextSpeedItem() {
+        if (database.length === 0) return;
+        
+        speedCurrentWord = database[Math.floor(Math.random() * database.length)];
+        document.getElementById("speed-word").innerText = speedCurrentWord.de;
+
+        let options = [speedCurrentWord.en];
+        while (options.length < 4) {
+            let randEn = database[Math.floor(Math.random() * database.length)].en;
+            if (!options.includes(randEn)) options.push(randEn);
+        }
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsContainer = document.getElementById("speed-options");
+        optionsContainer.innerHTML = "";
+
+        options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-opt";
+            btn.innerText = opt;
+            btn.onclick = () => {
+                speedScoreValue++;
+                document.getElementById("speed-score").innerText = speedScoreValue;
+                evaluateQuizSelection(btn, opt, speedCurrentWord.en, "#speed-options .quiz-opt", null, false);
+            };
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function concludeSpeedSession() {
+        alert(`🏁 Session ended! Final score tracked: ${speedScoreValue}`);
+        resetSpeedRoundUI();
+    }
+
+    function initMissedTrayView() {
+        const container = document.getElementById("missed-deck-container");
+        const emptyState = document.getElementById("missed-empty-state");
+
+        if (missedArray.length === 0) {
+            container.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        container.style.display = "block";
+        emptyState.style.display = "none";
+        currentMissedIndex = 0;
+
+        renderMissedCardItem();
+    }
+
+    function renderMissedCardItem() {
+        if (missedArray.length === 0) {
+            initMissedTrayView();
+            return;
+        }
+        
+        if (currentMissedIndex >= missedArray.length) currentMissedIndex = 0;
+        const item = missedArray[currentMissedIndex];
+
+        document.getElementById("missed-anim-target").classList.remove("flipped");
+
+        const mType = document.getElementById("m-tag-type");
+        const mDiff = document.getElementById("m-tag-diff");
+        const mTypeB = document.getElementById("m-tag-type-b");
+
+        mType.innerText = item.type;
+        mType.className = `tag ${item.type}`;
+        mTypeB.innerText = item.type;
+        mTypeB.className = `tag ${item.type}`;
+        
+        mDiff.innerText = item.difficulty;
+        mDiff.className = `tag ${item.difficulty}`;
+
+        document.getElementById("m-front-text").innerText = item.de;
+        document.getElementById("m-back-text").innerText = item.en;
+    }
+
+    function flipMissedCard() {
+        document.getElementById("missed-anim-target").classList.toggle("flipped");
+    }
+
+    function nextMissedCard() {
+        if (missedArray.length === 0) return;
+        currentMissedIndex = (currentMissedIndex + 1) % missedArray.length;
+        renderMissedCardItem();
+    }
+
+    function clearFromMissed() {
+        if (missedArray.length === 0) return;
+        missedArray.splice(currentMissedIndex, 1);
+        renderMissedCardItem();
+    }
+</script>
+</body>
+</html>
