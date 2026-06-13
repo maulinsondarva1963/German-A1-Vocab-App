@@ -8,27 +8,28 @@
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
 
         :root {
-            --bg-color: #eeeeee;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-dark: #292f36;
-            --text-muted: #888888;
-            --border-color: #e5e5e5;
-            --primary: #ff6b6b;
-            --secondary: #4ecdc4;
-            --tag-verb: #e2f2f0;
-            --tag-verb-text: #2d7a73;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            
+            /* Vibrant App Colors */
+            --primary: #3b82f6;
+            --quiz-color: #8b5cf6;
+            --speed-color: #f97316;
+            --missed-color: #e11d48;
+            --success-color: #10b981;
+
+            /* Tag Colors */
+            --tag-verb: #ccfbf1;
+            --tag-verb-text: #0f766e;
             --tag-noun: #e0f2fe;
-            --tag-noun-text: #0284c7;
+            --tag-noun-text: #0369a1;
             --tag-adjective: #f3e8ff;
             --tag-adjective-text: #6b21a8;
             --tag-other: #f1f5f9;
             --tag-other-text: #475569;
-            --tag-easy: #dcfce7;
-            --tag-easy-text: #15803d;
-            --tag-medium: #fef9c3;
-            --tag-medium-text: #a16207;
-            --tag-hard: #fee2e2;
-            --tag-hard-text: #b91c1c;
         }
 
         * {
@@ -38,7 +39,13 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: var(--bg-color);
+            background-color: #f0fdfa; 
+            /* Soft, engaging learning mesh gradient */
+            background-image: 
+                radial-gradient(at 40% 20%, #e0f2fe 0px, transparent 50%), 
+                radial-gradient(at 80% 0%, #fae8ff 0px, transparent 50%), 
+                radial-gradient(at 0% 50%, #fff1f2 0px, transparent 50%);
+            background-attachment: fixed;
             color: var(--text-dark);
             margin: 0;
             padding: 12px;
@@ -65,24 +72,28 @@
 
         .header h1 {
             margin: 0;
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: 900;
+            color: #0f172a;
         }
 
         .header .subtitle {
             font-size: 0.85em;
             color: var(--text-muted);
             margin-top: 2px;
+            font-weight: 600;
         }
 
-        /* NAVIGATION TABS */
+        /* COLORFUL NAVIGATION TABS */
         .tabs {
             display: flex;
-            background: #f5f5f5;
-            border-radius: 12px;
-            padding: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 6px;
             margin-bottom: 15px;
-            border: 1px solid var(--border-color);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
         .tab-btn {
@@ -93,37 +104,38 @@
             background: transparent;
             color: var(--text-muted);
             font-size: 0.95em;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
         }
 
-        .tab-btn.active {
-            background: var(--card-bg);
-            color: var(--text-dark);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.8); }
+
+        /* Specific Tab Colors when Active */
+        .tab-btn[onclick*="'flashcards'"].active { background: #dbeafe; color: #1d4ed8; border-bottom: 3px solid #3b82f6; }
+        .tab-btn[onclick*="'quiz'"].active { background: #f3e8ff; color: #6b21a8; border-bottom: 3px solid #8b5cf6; }
+        .tab-btn[onclick*="'speed'"].active { background: #ffedd5; color: #c2410c; border-bottom: 3px solid #f97316; }
+        .tab-btn[onclick*="'missed'"].active { background: #ffe4e6; color: #be123c; border-bottom: 3px solid #e11d48; }
 
         /* CAPSULE FILTER PANEL */
         .filter-panel {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
             padding: 14px;
             margin-bottom: 15px;
-            border: 1px solid rgba(0,0,0,0.02);
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
         .filter-row {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
             gap: 10px;
         }
-        .filter-row:last-child { margin-bottom: 0; }
 
         .filter-label {
-            font-size: 0.72em;
+            font-size: 0.75em;
             font-weight: 900;
             color: #94a3b8;
             text-transform: uppercase;
@@ -139,23 +151,22 @@
         }
 
         .filter-pill {
-            padding: 5px 14px;
-            border: 1px solid #e2e8f0;
+            padding: 6px 14px;
+            border: 2px solid #e2e8f0;
             border-radius: 20px;
-            background: var(--card-bg);
+            background: #ffffff;
             font-size: 0.85em;
-            font-weight: 600;
+            font-weight: 700;
             color: #64748b;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
         }
 
-        .filter-pill.active {
-            background: #f1f5f9;
-            color: var(--text-dark);
-            border-color: #cbd5e1;
-            font-weight: 700;
-        }
+        .filter-pill[onclick*="'all'"].active { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
+        .filter-pill[onclick*="'verb'"].active { background: var(--tag-verb); color: var(--tag-verb-text); border-color: #5eead4; }
+        .filter-pill[onclick*="'noun'"].active { background: var(--tag-noun); color: var(--tag-noun-text); border-color: #7dd3fc; }
+        .filter-pill[onclick*="'adjective'"].active { background: var(--tag-adjective); color: var(--tag-adjective-text); border-color: #d8b4fe; }
+        .filter-pill[onclick*="'other'"].active { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
 
         /* STATS COUNTER GRID */
         .stats-grid {
@@ -166,11 +177,12 @@
         }
 
         .stat-box {
-            background: #fdfdfd;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
             padding: 12px 5px;
             text-align: center;
-            border: 1px solid #e8e8e8;
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
         .stat-box .num {
@@ -178,11 +190,13 @@
             font-weight: 900;
             line-height: 1.2;
         }
+        .stat-box .num.blue { color: #3b82f6; }
         .stat-box .num.green { color: #10b981; }
         .stat-box .num.red { color: #f43f5e; }
 
         .stat-box .lbl {
             font-size: 0.75em;
+            font-weight: 700;
             color: var(--text-muted);
             margin-top: 3px;
         }
@@ -203,7 +217,7 @@
         .flashcard {
             width: 100%;
             height: 100%;
-            transition: transform 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
             transform-style: preserve-3d;
             position: relative;
         }
@@ -219,15 +233,32 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            border-radius: 20px;
+            border-radius: 24px;
             text-align: center;
             padding: 20px;
-            background: var(--card-bg);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.01);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        /* Colorful Flashcard Fronts & Backs */
+        .card-front {
+            background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%); /* Warm yellow tint */
+            border: 3px solid #fde68a;
         }
 
         .card-back {
+            background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%); /* Success green tint */
+            border: 3px solid #86efac;
+            transform: rotateY(180deg);
+        }
+
+        /* Missed Deck specific card colors */
+        .missed-front {
+            background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 100%); /* Rose tint */
+            border: 3px solid #fecdd3;
+        }
+        .missed-back {
+            background: linear-gradient(135deg, #ffffff 0%, #ffedd5 100%); /* Orange tint */
+            border: 3px solid #fed7aa;
             transform: rotateY(180deg);
         }
 
@@ -238,138 +269,199 @@
 
         .tag {
             font-size: 0.7em;
-            font-weight: 800;
-            padding: 3px 10px;
+            font-weight: 900;
+            padding: 4px 12px;
             border-radius: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .tag.verb { background: var(--tag-verb); color: var(--tag-verb-text); }
-        .tag.noun { background: var(--tag-noun); color: var(--tag-noun-text); }
-        .tag.adjective { background: var(--tag-adjective); color: var(--tag-adjective-text); }
-        .tag.other { background: var(--tag-other); color: var(--tag-other-text); }
-        .tag.easy { background: var(--tag-easy); color: var(--tag-easy-text); }
-        .tag.medium { background: var(--tag-medium); color: var(--tag-medium-text); }
-        .tag.hard { background: var(--tag-hard); color: var(--tag-hard-text); }
+        .tag.verb { background: var(--tag-verb); color: var(--tag-verb-text); border: 1px solid #99f6e4; }
+        .tag.noun { background: var(--tag-noun); color: var(--tag-noun-text); border: 1px solid #bae6fd; }
+        .tag.adjective { background: var(--tag-adjective); color: var(--tag-adjective-text); border: 1px solid #e9d5ff; }
+        .tag.other { background: var(--tag-other); color: var(--tag-other-text); border: 1px solid #e2e8f0; }
 
         .card-main-text {
-            font-size: 1.8em;
-            font-weight: 700;
+            font-size: 2em;
+            font-weight: 800;
             word-wrap: break-word;
             max-width: 100%;
             padding: 10px 0;
+            color: #1e293b;
         }
         .card-back .card-main-text {
-            color: #4f46e5;
+            color: #047857; /* Deep green for success back */
+        }
+        .missed-back .card-main-text {
+            color: #c2410c; /* Deep orange for missed back */
         }
 
         .card-footer-text {
-            font-size: 0.8em;
+            font-size: 0.85em;
+            font-weight: 700;
             color: #94a3b8;
+            background: rgba(255,255,255,0.6);
+            padding: 4px 12px;
+            border-radius: 20px;
         }
 
         /* ACTION NAVIGATION BUTTONS */
         .action-row {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            gap: 12px;
+            margin-top: 10px;
         }
 
         .btn {
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 14px;
-            font-size: 0.95em;
-            font-weight: 700;
+            border-radius: 16px;
+            font-size: 1em;
+            font-weight: 800;
             cursor: pointer;
             flex: 1;
             text-align: center;
-            transition: background 0.15s;
-            background: #e2e8f0;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-dark);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .btn:active { transform: scale(0.98); }
-        .btn.success { background: #10b981; color: white; }
-        .btn.danger { background: #f43f5e; color: white; }
+        .btn:active { transform: scale(0.96); }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e1;
+            color: #475569;
+        }
+        .btn.secondary:hover { background: #cbd5e1; }
+
+        .btn.success { 
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid #059669;
+        }
+        .btn.success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); }
+
+        .btn.danger { 
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3);
+            border: 2px solid #be123c;
+        }
+        .btn.danger:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(225, 29, 72, 0.4); }
+
+        .btn.quiz-action {
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            color: white;
+            border: 2px solid #7c3aed;
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.3);
+        }
 
         /* INTERACTIVE MCQ QUIZ AND SPEED MODES */
         .quiz-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
             text-align: center;
         }
 
-        .quiz-prompt {
-            font-size: 1.2em;
-            font-weight: 700;
-            margin-bottom: 20px;
+        #quiz-game-container {
+            background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+            border: 3px solid #e9d5ff;
         }
+
+        .quiz-prompt {
+            font-size: 1.3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #334155;
+        }
+        .quiz-prompt span { color: var(--quiz-color); font-size: 1.2em; }
 
         .options-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .quiz-opt {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 14px;
-            font-size: 0.95em;
-            font-weight: 700;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 1em;
+            font-weight: 800;
             text-align: left;
             cursor: pointer;
-            color: var(--text-dark);
-            transition: all 0.15s;
+            color: #334155;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
-        .quiz-opt.correct { background: #dcfce7; border-color: #10b981; color: #15803d; }
-        .quiz-opt.wrong { background: #fee2e2; border-color: #f43f5e; color: #b91c1c; }
+        .quiz-opt:hover { border-color: #94a3b8; background: #f8fafc; transform: translateX(4px); }
+        .quiz-opt.correct { background: #dcfce7; border-color: #10b981; color: #047857; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); transform: scale(1.02); }
+        .quiz-opt.wrong { background: #fee2e2; border-color: #f43f5e; color: #be123c; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); }
 
         /* SPEED CLOCK HUD ELEMENTS */
+        #speed-game-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            border: 3px solid #fed7aa;
+        }
+
+        #speed-game-panel .quiz-prompt span { color: var(--speed-color); }
+
         .speed-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--text-dark);
+            background: linear-gradient(90deg, #f97316 0%, #ef4444 100%);
             color: white;
-            padding: 12px 16px;
-            border-radius: 14px;
-            margin-bottom: 15px;
-            font-weight: 700;
+            padding: 14px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            font-weight: 900;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
         }
 
         .timer-badge {
-            background: var(--primary);
-            padding: 4px 12px;
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            backdrop-filter: blur(5px);
         }
 
         .start-screen {
-            background: var(--card-bg);
-            border-radius: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            border: 3px solid #fed7aa;
+            border-radius: 24px;
             padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        }
+        
+        .start-screen h2 {
+            color: #ea580c;
+            font-size: 1.8em;
+            margin-top: 0;
         }
 
         .empty-message {
             text-align: center;
-            color: var(--text-muted);
+            color: #64748b;
             padding: 40px 20px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            font-weight: 600;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed #cbd5e1;
+            border-radius: 24px;
+            font-weight: 800;
+            font-size: 1.1em;
         }
 
         @media (max-width: 480px) {
             body { padding: 10px; }
             .filter-label { width: 75px; font-size: 0.7em; }
-            .card-main-text { font-size: 1.5em; }
-            .options-list { gap: 8px; }
+            .card-main-text { font-size: 1.6em; }
+            .options-list { gap: 10px; }
         }
     </style>
 </head>
@@ -379,9 +471,9 @@
     
     <div class="header">
         <div>
-            <h1 style="display: flex; align-items: center; gap: 8px;">
-                <span style="background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 8px; font-size: 0.7em;">De</span>
-                Netzwerk neu A1
+            <h1 style="display: flex; align-items: center; gap: 10px;">
+                <span style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: white; padding: 4px 10px; border-radius: 10px; font-size: 0.7em; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);">De</span>
+                Netzwerk neu A1 - Chapter 1
             </h1>
             <div class="subtitle"><span id="total-pool-count">0</span> words total</div>
         </div>
@@ -390,7 +482,7 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
         <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
-        <button class="tab-btn" onclick="switchTab('speed')">Speed round</button>
+        <button class="tab-btn" onclick="switchTab('speed')">Speed</button>
         <button class="tab-btn" onclick="switchTab('missed')">Missed</button>
     </div>
 
@@ -405,20 +497,11 @@
                 <button class="filter-pill" onclick="setWordTypeFilter('other', this)">Others</button>
             </div>
         </div>
-        <div class="filter-row">
-            <div class="filter-label">Difficulty</div>
-            <div class="filter-options">
-                <button class="filter-pill active" onclick="setDifficultyFilter('all', this)">All</button>
-                <button class="filter-pill" onclick="setDifficultyFilter('easy', this)">Easy</button>
-                <button class="filter-pill" onclick="setDifficultyFilter('medium', this)">Medium</button>
-                <button class="filter-pill" onclick="setDifficultyFilter('hard', this)">Hard</button>
-            </div>
-        </div>
     </div>
 
     <div class="stats-grid" id="stats-grid">
         <div class="stat-box">
-            <div class="num" id="stat-reviewed">0/0</div>
+            <div class="num blue" id="stat-reviewed">0/0</div>
             <div class="lbl">reviewed</div>
         </div>
         <div class="stat-box">
@@ -438,7 +521,6 @@
                     <div class="card-face card-front">
                         <div class="card-tags">
                             <span class="tag" id="fc-tag-type">type</span>
-                            <span class="tag" id="fc-tag-diff">diff</span>
                         </div>
                         <div class="card-main-text" id="fc-front-text">Wort</div>
                         <div class="card-footer-text">tap to reveal</div>
@@ -453,49 +535,45 @@
                 </div>
             </div>
             
-            <div class="action-row">
-                <button class="btn" style="background:#eef2f6; border:1px solid #cbd5e1" onclick="prevCard()">← Back</button>
-                <button class="btn" style="background:#eef2f6; border:1px solid #cbd5e1" onclick="skipCard()">Next →</button>
+            <div class="action-row" style="margin-bottom: 10px;">
+                <button class="btn secondary" style="font-size: 0.9em; padding: 12px;" onclick="shuffleDeck()">🔀 Shuffle</button>
+                <button class="btn secondary" style="font-size: 0.9em; padding: 12px;" onclick="resetSession()">🔄 Reset</button>
             </div>
-            
+
             <div class="action-row">
                 <button class="btn danger" onclick="markCardMissed()">❌ Missed</button>
                 <button class="btn success" onclick="markCardKnew()">✓ Knew It</button>
             </div>
-
-            <div class="action-row">
-                <button class="btn" style="background:#f1f5f9; color:#64748b; font-size:0.88em; padding:10px; border:1px dashed #cbd5e1;" onclick="resetVocabularyProgress()">🔄 Reset Progress</button>
-            </div>
         </div>
         <div id="fc-empty-state" class="empty-message" style="display:none;">
-            No words match your selected filters. Try broadening your selection!
+            ✨ No words match your selected filters. Try broadening your selection!
         </div>
     </div>
 
     <div id="quiz" class="section">
         <div id="quiz-game-container" class="quiz-card">
-            <div class="quiz-prompt">What does "<span id="quiz-word" style="color:var(--primary);">Wort</span>" mean?</div>
+            <div class="quiz-prompt">What does "<span>Wort</span>" mean?</div>
             <div class="options-list" id="quiz-options">
                 </div>
-            <button class="btn" id="quiz-next-btn" style="margin-top:20px; display:none;" onclick="initQuizQuestion()">Next Word →</button>
+            <button class="btn quiz-action" id="quiz-next-btn" style="margin-top:20px; display:none; width: 100%;" onclick="initQuizQuestion()">Next Word →</button>
         </div>
         <div id="quiz-empty-state" class="empty-message" style="display:none;">
-            No words available to generate a quiz. Check your filters!
+            ✨ No words available to generate a quiz. Check your filters!
         </div>
     </div>
 
     <div id="speed" class="section">
         <div id="speed-start-panel" class="start-screen">
-            <h2>⏱️ Speed Round Challenge</h2>
-            <p style="color:var(--text-muted); margin-bottom:25px;">Race against the clock! Answer as many words as you can in 30 seconds.</p>
-            <button class="btn success" style="max-width:200px; margin:0 auto;" onclick="startSpeedRound()">Start Speed Run</button>
+            <h2>⏱️ Speed Round</h2>
+            <p style="color:#94a3b8; margin-bottom:30px; font-weight: 700;">Race against the clock! Answer as many words as you can in 30 seconds.</p>
+            <button class="btn" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; width: 100%; box-shadow: 0 6px 15px rgba(234, 88, 12, 0.3); border: 2px solid #c2410c;" onclick="startSpeedRound()">Start Speed Run 🚀</button>
         </div>
         <div id="speed-game-panel" class="quiz-card" style="display:none;">
             <div class="speed-header">
                 <div>Score: <span id="speed-score">0</span></div>
-                <div class="timer-badge">Time: <span id="speed-timer">30</span>s</div>
+                <div class="timer-badge">⏱️ <span id="speed-timer">30</span>s</div>
             </div>
-            <div class="quiz-prompt" style="font-size:1.4em;">"<span id="speed-word">Wort</span>"</div>
+            <div class="quiz-prompt" style="font-size:1.5em;">"<span>Wort</span>"</div>
             <div class="options-list" id="speed-options">
                 </div>
         </div>
@@ -503,18 +581,17 @@
 
     <div id="missed" class="section">
         <div id="missed-deck-container">
-            <p style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-bottom:12px;">Reviewing words you recently marked as missed or failed.</p>
+            <p style="font-size:0.9em; color:#e11d48; text-align:center; margin-bottom:15px; font-weight: 800;">Reviewing words you recently marked as missed.</p>
             <div class="flashcard-wrapper" onclick="flipMissedCard()">
                 <div class="flashcard" id="missed-anim-target">
-                    <div class="card-face card-front">
+                    <div class="card-face card-front missed-front">
                         <div class="card-tags">
                             <span class="tag" id="m-tag-type">type</span>
-                            <span class="tag" id="m-tag-diff">diff</span>
                         </div>
                         <div class="card-main-text" id="m-front-text">Wort</div>
                         <div class="card-footer-text">tap to reveal</div>
                     </div>
-                    <div class="card-face card-back">
+                    <div class="card-face card-back missed-back">
                         <div class="card-tags">
                             <span class="tag" id="m-tag-type-b">type</span>
                         </div>
@@ -524,12 +601,12 @@
                 </div>
             </div>
             <div class="action-row">
-                <button class="btn" style="background:#f1f5f9; border:1px solid #cbd5e1;" onclick="nextMissedCard()">Keep in List</button>
-                <button class="btn success" onclick="clearFromMissed()">Mastered & Clear</button>
+                <button class="btn secondary" onclick="nextMissedCard()">Keep in List</button>
+                <button class="btn success" onclick="clearFromMissed()">Mastered & Clear ✨</button>
             </div>
         </div>
         <div id="missed-empty-state" class="empty-message">
-            🎉 Nice! Your missed words tray is completely clear!
+            🎉 Amazing! Your missed words tray is completely clear!
         </div>
     </div>
 
@@ -745,7 +822,6 @@
 
     let currentTab = "flashcards";
     let filterType = "all";
-    let filterDiff = "all";
     
     let filteredPool = [];
     let activeCardIndex = 0;
@@ -801,12 +877,6 @@
         applyFilters();
     }
 
-    function setDifficultyFilter(diff, element) {
-        setSelectedPill(element);
-        filterDiff = diff;
-        applyFilters();
-    }
-
     function setSelectedPill(el) {
         const parent = el.parentElement;
         parent.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
@@ -815,9 +885,7 @@
 
     function applyFilters() {
         filteredPool = database.filter(item => {
-            const matchesType = (filterType === "all" || item.type === filterType);
-            const matchesDiff = (filterDiff === "all" || item.difficulty === filterDiff);
-            return matchesType && matchesDiff;
+            return (filterType === "all" || item.type === filterType);
         });
 
         activeCardIndex = 0;
@@ -828,6 +896,31 @@
         } else if (currentTab === "quiz") {
             initQuizQuestion();
         }
+    }
+    
+    function shuffleDeck() {
+        if (filteredPool.length === 0) return;
+        
+        // standard Fisher-Yates shuffle algorithm
+        for (let i = filteredPool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredPool[i], filteredPool[j]] = [filteredPool[j], filteredPool[i]];
+        }
+        
+        activeCardIndex = 0;
+        updateGlobalStatsDashboard();
+        renderFlashcardView();
+    }
+
+    function resetSession() {
+        // Reset all stat trackers
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        missedArray = [];
+        currentMissedIndex = 0;
+        
+        // Re-apply current filters to rebuild the fresh deck starting at index 0
+        applyFilters();
     }
 
     function updateGlobalStatsDashboard() {
@@ -853,7 +946,6 @@
         document.getElementById("fc-anim-target").classList.remove("flipped");
 
         const typeTag = document.getElementById("fc-tag-type");
-        const diffTag = document.getElementById("fc-tag-diff");
         const typeTagB = document.getElementById("fc-tag-type-b");
 
         typeTag.innerText = item.type;
@@ -861,22 +953,23 @@
         typeTagB.innerText = item.type;
         typeTagB.className = `tag ${item.type}`;
 
-        diffTag.innerText = item.difficulty;
-        diffTag.className = `tag ${item.difficulty}`;
-
-        document.getElementById("fc-front-text").innerText = item.de;
-        document.getElementById("fc-back-text").innerText = item.en;
+        // Inject content
+        const frontTextEl = document.getElementById("fc-front-text");
+        const backTextEl = document.getElementById("fc-back-text");
+        
+        frontTextEl.innerText = item.de;
+        backTextEl.innerText = item.en;
+        
+        // Format based on length so long words don't overflow
+        if (item.de.length > 20) frontTextEl.style.fontSize = "1.5em";
+        else frontTextEl.style.fontSize = "2em";
+        
+        if (item.en.length > 25) backTextEl.style.fontSize = "1.3em";
+        else backTextEl.style.fontSize = "2em";
     }
 
     function flipCard() {
         document.getElementById("fc-anim-target").classList.toggle("flipped");
-    }
-
-    function prevCard() {
-        if (filteredPool.length === 0) return;
-        activeCardIndex = (activeCardIndex - 1 + filteredPool.length) % filteredPool.length;
-        updateGlobalStatsDashboard();
-        renderFlashcardView();
     }
 
     function advanceDeckNextPointer() {
@@ -885,10 +978,6 @@
         totalReviewedCount++;
         updateGlobalStatsDashboard();
         renderFlashcardView();
-    }
-
-    function skipCard() {
-        advanceDeckNextPointer();
     }
 
     function markCardKnew() {
@@ -902,16 +991,6 @@
             missedArray.push(currentItem);
         }
         advanceDeckNextPointer();
-    }
-
-    function resetVocabularyProgress() {
-        if (confirm("Are you sure you want to completely reset your progress metrics and missed words tray?")) {
-            totalReviewedCount = 0;
-            knewItCount = 0;
-            missedArray = [];
-            activeCardIndex = 0;
-            applyFilters();
-        }
     }
 
     function initQuizQuestion() {
@@ -930,7 +1009,7 @@
         nextBtn.style.display = "none";
 
         const targetItem = filteredPool[Math.floor(Math.random() * filteredPool.length)];
-        document.getElementById("quiz-word").innerText = targetItem.de;
+        document.querySelector("#quiz-game-container .quiz-prompt span").innerText = targetItem.de;
 
         let options = [targetItem.en];
         while (options.length < 4 && options.length < database.length) {
@@ -1013,7 +1092,7 @@
         if (database.length === 0) return;
         
         speedCurrentWord = database[Math.floor(Math.random() * database.length)];
-        document.getElementById("speed-word").innerText = speedCurrentWord.de;
+        document.querySelector("#speed-game-panel .quiz-prompt span").innerText = speedCurrentWord.de;
 
         let options = [speedCurrentWord.en];
         while (options.length < 4) {
@@ -1039,7 +1118,7 @@
     }
 
     function concludeSpeedSession() {
-        alert(`🏁 Session ended! Final score tracked: ${speedScoreValue}`);
+        alert(`🏁 Time's up! You scored ${speedScoreValue} points!`);
         resetSpeedRoundUI();
     }
 
@@ -1072,19 +1151,25 @@
         document.getElementById("missed-anim-target").classList.remove("flipped");
 
         const mType = document.getElementById("m-tag-type");
-        const mDiff = document.getElementById("m-tag-diff");
         const mTypeB = document.getElementById("m-tag-type-b");
 
         mType.innerText = item.type;
         mType.className = `tag ${item.type}`;
         mTypeB.innerText = item.type;
         mTypeB.className = `tag ${item.type}`;
-        
-        mDiff.innerText = item.difficulty;
-        mDiff.className = `tag ${item.difficulty}`;
 
-        document.getElementById("m-front-text").innerText = item.de;
-        document.getElementById("m-back-text").innerText = item.en;
+        const frontTextEl = document.getElementById("m-front-text");
+        const backTextEl = document.getElementById("m-back-text");
+        
+        frontTextEl.innerText = item.de;
+        backTextEl.innerText = item.en;
+        
+        // Format based on length so long words don't overflow
+        if (item.de.length > 20) frontTextEl.style.fontSize = "1.5em";
+        else frontTextEl.style.fontSize = "2em";
+        
+        if (item.en.length > 25) backTextEl.style.fontSize = "1.3em";
+        else backTextEl.style.fontSize = "2em";
     }
 
     function flipMissedCard() {
