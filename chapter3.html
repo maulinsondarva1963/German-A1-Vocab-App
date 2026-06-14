@@ -162,11 +162,15 @@
             transition: all 0.2s ease;
         }
 
-        .filter-pill[onclick*="'all'"].active { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
+        .filter-pill.active { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
         .filter-pill[onclick*="'verb'"].active { background: var(--tag-verb); color: var(--tag-verb-text); border-color: #5eead4; }
         .filter-pill[onclick*="'noun'"].active { background: var(--tag-noun); color: var(--tag-noun-text); border-color: #7dd3fc; }
         .filter-pill[onclick*="'adjective'"].active { background: var(--tag-adjective); color: var(--tag-adjective-text); border-color: #d8b4fe; }
         .filter-pill[onclick*="'other'"].active { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
+
+        /* Setup specific pill colors */
+        .setup-pill { border-color: #e9d5ff; color: #8b5cf6; min-width: 50px; text-align: center; }
+        .setup-pill.active { background: #f3e8ff; color: #6b21a8; border-color: #a855f7; }
 
         /* STATS COUNTER GRID */
         .stats-grid {
@@ -241,23 +245,23 @@
 
         /* Colorful Flashcard Fronts & Backs */
         .card-front {
-            background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%); /* Warm yellow tint */
+            background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%); 
             border: 3px solid #fde68a;
         }
 
         .card-back {
-            background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%); /* Success green tint */
+            background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%); 
             border: 3px solid #86efac;
             transform: rotateY(180deg);
         }
 
         /* Missed Deck specific card colors */
         .missed-front {
-            background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 100%); /* Rose tint */
+            background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 100%); 
             border: 3px solid #fecdd3;
         }
         .missed-back {
-            background: linear-gradient(135deg, #ffffff 0%, #ffedd5 100%); /* Orange tint */
+            background: linear-gradient(135deg, #ffffff 0%, #ffedd5 100%); 
             border: 3px solid #fed7aa;
             transform: rotateY(180deg);
         }
@@ -363,9 +367,6 @@
             padding: 24px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.04);
             text-align: center;
-        }
-
-        #quiz-game-container {
             background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
             border: 3px solid #e9d5ff;
         }
@@ -400,6 +401,18 @@
         .quiz-opt:hover { border-color: #94a3b8; background: #f8fafc; transform: translateX(4px); }
         .quiz-opt.correct { background: #dcfce7; border-color: #10b981; color: #047857; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); transform: scale(1.02); }
         .quiz-opt.wrong { background: #fee2e2; border-color: #f43f5e; color: #be123c; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); }
+
+        /* Quiz Summary Styles */
+        .mistake-card {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: left;
+        }
+        .mistake-word { font-weight: 900; font-size: 1.2em; color: #1e293b; margin-bottom: 6px; }
+        .mistake-wrong { font-size: 0.9em; color: #be123c; margin-bottom: 4px; }
+        .mistake-correct { font-size: 0.9em; color: #047857; font-weight: bold; }
 
         /* SPEED CLOCK HUD ELEMENTS */
         #speed-game-panel {
@@ -462,6 +475,7 @@
             .filter-label { width: 75px; font-size: 0.7em; }
             .card-main-text { font-size: 1.6em; }
             .options-list { gap: 10px; }
+            .action-row { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
@@ -545,18 +559,60 @@
                 <button class="btn success" onclick="markCardKnew()">✓ Knew It</button>
             </div>
         </div>
+
+        <div id="fc-completed-state" class="start-screen" style="display:none; margin-top: 15px;">
+            <h2 style="color: #10b981;">🎉 Ausgezeichnet! 🎉</h2>
+            <p style="color:#64748b; margin-bottom:30px; font-weight: 700;">You've completed all the flashcards in this set. Excellent work!</p>
+            <div class="action-row">
+                <button class="btn secondary" onclick="resetSession()">🔄 Start Over</button>
+                <button class="btn quiz-action" onclick="switchTab('quiz')">Take a Quiz 📝</button>
+            </div>
+        </div>
+
         <div id="fc-empty-state" class="empty-message" style="display:none;">
             ✨ No words match your selected filters. Try broadening your selection!
         </div>
     </div>
 
     <div id="quiz" class="section">
-        <div id="quiz-game-container" class="quiz-card">
+
+        <div id="quiz-setup-container" class="start-screen" style="border-color: #e9d5ff; background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);">
+            <h2 style="color: #8b5cf6;">📝 Quiz Setup</h2>
+            <p style="color:#64748b; margin-bottom:20px; font-weight: 700;">How many questions would you like to answer?</p>
+            
+            <div class="filter-options" style="justify-content: center; margin-bottom: 30px;">
+                <button class="filter-pill setup-pill active" onclick="selectQuizLength(20, this)">20</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength(30, this)">30</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength(40, this)">40</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength('all', this)">All</button>
+            </div>
+
+            <button class="btn quiz-action" style="width: 100%;" onclick="startNewQuiz()">Start Quiz 🚀</button>
+        </div>
+
+        <div id="quiz-header" style="display:none; justify-content:space-between; margin-bottom:15px; font-weight:800; color:#64748b; background: rgba(255,255,255,0.8); padding: 10px 15px; border-radius: 12px; border: 2px solid #e2e8f0;">
+            <span id="quiz-progress">Question 1 / 20</span>
+            <span id="quiz-score-display" style="color: #8b5cf6;">Score: 0</span>
+        </div>
+
+        <div id="quiz-game-container" class="quiz-card" style="display:none;">
             <div class="quiz-prompt">What does "<span>Wort</span>" mean?</div>
-            <div class="options-list" id="quiz-options">
-                </div>
+            <div class="options-list" id="quiz-options"></div>
             <button class="btn quiz-action" id="quiz-next-btn" style="margin-top:20px; display:none; width: 100%;" onclick="initQuizQuestion()">Next Word →</button>
         </div>
+
+        <div id="quiz-summary-container" class="quiz-card" style="display:none;">
+            <h2 style="color: #7c3aed; margin-top: 0;">Quiz Complete! 🎉</h2>
+            <p id="quiz-final-score" style="font-size:1.2em; font-weight:900; color: #1e293b; margin-bottom: 20px;"></p>
+            
+            <div id="quiz-mistakes-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+            
+            <div class="action-row" style="margin-top:25px;">
+                <button class="btn secondary" onclick="showQuizSetup()">New Quiz 🔄</button>
+                <button id="quiz-retake-btn" class="btn quiz-action" style="display:none;" onclick="startMistakesQuiz()">Retake Missed 📝</button>
+            </div>
+        </div>
+
         <div id="quiz-empty-state" class="empty-message" style="display:none;">
             ✨ No words available to generate a quiz. Check your filters!
         </div>
@@ -574,8 +630,7 @@
                 <div class="timer-badge">⏱️ <span id="speed-timer">30</span>s</div>
             </div>
             <div class="quiz-prompt" style="font-size:1.5em;">"<span>Wort</span>"</div>
-            <div class="options-list" id="speed-options">
-                </div>
+            <div class="options-list" id="speed-options"></div>
         </div>
     </div>
 
@@ -613,7 +668,6 @@
 </div>
 
 <script>
-    // COMPLETE DICTIONARY GLOSSARY MAPPED FOR CHAPTER 3: IN HAMBURG
     const database = [
         { de: "die Stadttour, -en", en: "city tour", type: "noun" },
         { de: "die Station, -en", en: "station", type: "noun" },
@@ -785,6 +839,16 @@
     let missedArray = [];
     let currentMissedIndex = 0;
 
+    // --- Quiz Mode Variables ---
+    let selectedQuizLength = 20;
+    let quizPool = [];
+    let quizSessionCount = 0;
+    let quizMaxQuestions = 20;
+    let quizCurrentScore = 0;
+    let quizMistakes = [];
+    let quizActiveItem = null;
+
+    // --- Speed Mode Variables ---
     let speedTimerInterval = null;
     let speedTimeLeft = 30;
     let speedScoreValue = 0;
@@ -820,8 +884,12 @@
         } else {
             filterPanel.style.display = "block";
             statsPanel.style.display = "grid";
-            applyFilters();
-            if (tabId === "quiz") initQuizQuestion();
+            
+            if (tabId === "flashcards") {
+                renderFlashcardView();
+            } else if (tabId === "quiz") {
+                showQuizSetup();
+            }
         }
     }
 
@@ -833,7 +901,7 @@
 
     function setSelectedPill(el) {
         const parent = el.parentElement;
-        parent.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        parent.querySelectorAll('.filter-pill:not(.setup-pill)').forEach(p => p.classList.remove('active'));
         el.classList.add('active');
     }
 
@@ -843,37 +911,38 @@
         });
 
         activeCardIndex = 0;
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        
         updateGlobalStatsDashboard();
 
         if (currentTab === "flashcards") {
             renderFlashcardView();
         } else if (currentTab === "quiz") {
-            initQuizQuestion();
+            showQuizSetup();
         }
     }
     
     function shuffleDeck() {
         if (filteredPool.length === 0) return;
-        
-        // standard Fisher-Yates shuffle algorithm
         for (let i = filteredPool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [filteredPool[i], filteredPool[j]] = [filteredPool[j], filteredPool[i]];
         }
         
         activeCardIndex = 0;
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        
         updateGlobalStatsDashboard();
         renderFlashcardView();
     }
 
     function resetSession() {
-        // Reset all stat trackers
         totalReviewedCount = 0;
         knewItCount = 0;
         missedArray = [];
         currentMissedIndex = 0;
-        
-        // Re-apply current filters to rebuild the fresh deck starting at index 0
         applyFilters();
     }
 
@@ -883,13 +952,24 @@
         document.getElementById("stat-missed-count").innerText = missedArray.length;
     }
 
+    // --- FLASHCARD LOGIC ---
     function renderFlashcardView() {
         const deckContainer = document.getElementById("fc-deck-container");
         const emptyState = document.getElementById("fc-empty-state");
+        const completedState = document.getElementById("fc-completed-state");
         
+        if (completedState) completedState.style.display = "none";
+
         if (filteredPool.length === 0) {
             deckContainer.style.display = "none";
             emptyState.style.display = "block";
+            return;
+        }
+
+        if (totalReviewedCount >= filteredPool.length) {
+            deckContainer.style.display = "none";
+            emptyState.style.display = "none";
+            completedState.style.display = "block";
             return;
         }
 
@@ -907,14 +987,12 @@
         typeTagB.innerText = item.type;
         typeTagB.className = `tag ${item.type}`;
 
-        // Inject content
         const frontTextEl = document.getElementById("fc-front-text");
         const backTextEl = document.getElementById("fc-back-text");
         
         frontTextEl.innerText = item.de;
         backTextEl.innerText = item.en;
         
-        // Format based on length so long words don't overflow
         if (item.de.length > 20) frontTextEl.style.fontSize = "1.5em";
         else frontTextEl.style.fontSize = "2em";
         
@@ -928,14 +1006,27 @@
 
     function advanceDeckNextPointer() {
         if (filteredPool.length === 0) return;
-        activeCardIndex = (activeCardIndex + 1) % filteredPool.length;
-        totalReviewedCount++;
+        
+        if (totalReviewedCount < filteredPool.length) {
+            totalReviewedCount++;
+        }
+        
         updateGlobalStatsDashboard();
+
+        if (totalReviewedCount >= filteredPool.length) {
+            document.getElementById("fc-deck-container").style.display = "none";
+            document.getElementById("fc-completed-state").style.display = "block";
+            return;
+        }
+
+        activeCardIndex = (activeCardIndex + 1) % filteredPool.length;
         renderFlashcardView();
     }
 
     function markCardKnew() {
-        knewItCount++;
+        if (totalReviewedCount < filteredPool.length) {
+            knewItCount++;
+        }
         advanceDeckNextPointer();
     }
 
@@ -947,25 +1038,93 @@
         advanceDeckNextPointer();
     }
 
-    function initQuizQuestion() {
-        const gameContainer = document.getElementById("quiz-game-container");
+    // --- NEW QUIZ LOGIC WITH SETUP SCREEN ---
+    
+    function selectQuizLength(length, element) {
+        selectedQuizLength = length;
+        const parent = element.parentElement;
+        parent.querySelectorAll('.setup-pill').forEach(p => p.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function showQuizSetup() {
+        document.getElementById("quiz-game-container").style.display = "none";
+        document.getElementById("quiz-header").style.display = "none";
+        document.getElementById("quiz-summary-container").style.display = "none";
+        
+        const setupContainer = document.getElementById("quiz-setup-container");
         const emptyState = document.getElementById("quiz-empty-state");
-        const nextBtn = document.getElementById("quiz-next-btn");
 
         if (filteredPool.length === 0) {
-            gameContainer.style.display = "none";
+            setupContainer.style.display = "none";
             emptyState.style.display = "block";
+        } else {
+            emptyState.style.display = "none";
+            setupContainer.style.display = "block";
+        }
+    }
+
+    function startNewQuiz() {
+        quizPool = [...filteredPool].sort(() => Math.random() - 0.5);
+        
+        if (selectedQuizLength === 'all') {
+            quizMaxQuestions = quizPool.length;
+        } else {
+            quizMaxQuestions = Math.min(selectedQuizLength, quizPool.length);
+        }
+
+        quizSessionCount = 0;
+        quizCurrentScore = 0;
+        quizMistakes = [];
+
+        launchQuizUI();
+    }
+
+    function startMistakesQuiz() {
+        quizPool = quizMistakes.map(m => m.item).sort(() => Math.random() - 0.5);
+        quizMaxQuestions = quizPool.length;
+        quizSessionCount = 0;
+        quizCurrentScore = 0;
+        quizMistakes = [];
+
+        launchQuizUI();
+    }
+
+    function launchQuizUI() {
+        document.getElementById("quiz-setup-container").style.display = "none";
+        document.getElementById("quiz-summary-container").style.display = "none";
+        
+        const gameContainer = document.getElementById("quiz-game-container");
+        const header = document.getElementById("quiz-header");
+
+        if (quizPool.length === 0) {
+            gameContainer.style.display = "none";
+            header.style.display = "none";
             return;
         }
 
         gameContainer.style.display = "block";
-        emptyState.style.display = "none";
-        nextBtn.style.display = "none";
+        header.style.display = "flex";
 
-        const targetItem = filteredPool[Math.floor(Math.random() * filteredPool.length)];
-        document.querySelector("#quiz-game-container .quiz-prompt span").innerText = targetItem.de;
+        initQuizQuestion();
+    }
 
-        let options = [targetItem.en];
+    function initQuizQuestion() {
+        if (quizSessionCount >= quizMaxQuestions) {
+            showQuizSummary();
+            return;
+        }
+
+        quizSessionCount++;
+        document.getElementById("quiz-progress").innerText = `Question ${quizSessionCount} / ${quizMaxQuestions}`;
+        document.getElementById("quiz-score-display").innerText = `Score: ${quizCurrentScore}`;
+        
+        document.getElementById("quiz-next-btn").style.display = "none";
+
+        quizActiveItem = quizPool[quizSessionCount - 1];
+        document.querySelector("#quiz-game-container .quiz-prompt span").innerText = quizActiveItem.de;
+
+        let options = [quizActiveItem.en];
         while (options.length < 4 && options.length < database.length) {
             let randEn = database[Math.floor(Math.random() * database.length)].en;
             if (!options.includes(randEn)) options.push(randEn);
@@ -979,40 +1138,92 @@
             const button = document.createElement("button");
             button.className = "quiz-opt";
             button.innerText = opt;
-            button.onclick = () => evaluateQuizSelection(button, opt, targetItem.en, ".quiz-opt", "quiz-next-btn", true);
+            button.onclick = () => handleQuizSelection(button, opt);
             optionsBox.appendChild(button);
         });
     }
 
-    function evaluateQuizSelection(selectedBtn, chosenValue, correctValue, classTarget, nextBtnId, trackMissedFlag) {
-        const allButtons = document.querySelectorAll(classTarget);
+    function handleQuizSelection(selectedBtn, chosenValue) {
+        const correctValue = quizActiveItem.en;
+        const allButtons = document.querySelectorAll("#quiz-options .quiz-opt");
         allButtons.forEach(btn => btn.disabled = true);
 
         if (chosenValue === correctValue) {
             selectedBtn.classList.add("correct");
-            if (!trackMissedFlag) speedScoreValue += 2; 
+            quizCurrentScore++;
+            document.getElementById("quiz-score-display").innerText = `Score: ${quizCurrentScore}`;
         } else {
             selectedBtn.classList.add("wrong");
             allButtons.forEach(btn => {
                 if (btn.innerText === correctValue) btn.classList.add("correct");
             });
 
-            if (trackMissedFlag) {
-                const missingObj = database.find(i => i.en === correctValue);
-                if (missingObj && !missedArray.some(m => m.de === missingObj.de)) {
-                    missedArray.push(missingObj);
-                }
-            } else {
-                speedTimeLeft = Math.max(0, speedTimeLeft - 3);
-                document.getElementById("speed-timer").innerText = speedTimeLeft;
+            quizMistakes.push({
+                item: quizActiveItem,
+                de: quizActiveItem.de,
+                userAns: chosenValue,
+                correctAns: correctValue
+            });
+
+            if (!missedArray.some(m => m.de === quizActiveItem.de)) {
+                missedArray.push(quizActiveItem);
+                updateGlobalStatsDashboard();
             }
         }
 
-        const nextControl = document.getElementById(nextBtnId);
-        if (nextControl) nextControl.style.display = "block";
-        if (!nextBtnId) {
-            setTimeout(() => { if (speedTimeLeft > 0) processNextSpeedItem(); }, 800);
+        document.getElementById("quiz-next-btn").style.display = "block";
+    }
+
+    function showQuizSummary() {
+        document.getElementById("quiz-game-container").style.display = "none";
+        document.getElementById("quiz-header").style.display = "none";
+        
+        const summaryContainer = document.getElementById("quiz-summary-container");
+        summaryContainer.style.display = "block";
+
+        document.getElementById("quiz-final-score").innerText = `You scored ${quizCurrentScore} out of ${quizMaxQuestions}!`;
+
+        const mistakesList = document.getElementById("quiz-mistakes-list");
+        const retakeBtn = document.getElementById("quiz-retake-btn");
+        
+        if (quizMistakes.length === 0) {
+            mistakesList.innerHTML = "<div style='color:#10b981; font-weight:800; padding:20px; background:#dcfce7; border-radius:12px; border:2px solid #86efac;'>Perfect score! No mistakes made. 🌟</div>";
+            retakeBtn.style.display = "none";
+        } else {
+            let html = "<h3 style='color:#e11d48; font-size:1.1em; margin-bottom:5px; text-align:left;'>Words to Review:</h3>";
+            quizMistakes.forEach(m => {
+                html += `
+                <div class="mistake-card">
+                    <div class="mistake-word">${m.de}</div>
+                    <div class="mistake-wrong">❌ You chose: <strong>${m.userAns}</strong></div>
+                    <div class="mistake-correct">✅ Correct: ${m.correctAns}</div>
+                </div>`;
+            });
+            mistakesList.innerHTML = html;
+            retakeBtn.style.display = "block";
         }
+    }
+
+    // --- SPEED LOGIC (INFINITE CLOCK-BASED) ---
+    function evaluateSpeedSelection(selectedBtn, chosenValue) {
+        const correctValue = speedCurrentWord.en;
+        const allButtons = document.querySelectorAll("#speed-options .quiz-opt");
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (chosenValue === correctValue) {
+            selectedBtn.classList.add("correct");
+            speedScoreValue += 2; 
+        } else {
+            selectedBtn.classList.add("wrong");
+            allButtons.forEach(btn => {
+                if (btn.innerText === correctValue) btn.classList.add("correct");
+            });
+            speedTimeLeft = Math.max(0, speedTimeLeft - 3);
+            document.getElementById("speed-timer").innerText = speedTimeLeft;
+        }
+
+        document.getElementById("speed-score").innerText = speedScoreValue;
+        setTimeout(() => { if (speedTimeLeft > 0) processNextSpeedItem(); }, 800);
     }
 
     function resetSpeedRoundUI() {
@@ -1062,11 +1273,7 @@
             const btn = document.createElement("button");
             btn.className = "quiz-opt";
             btn.innerText = opt;
-            btn.onclick = () => {
-                speedScoreValue++;
-                document.getElementById("speed-score").innerText = speedScoreValue;
-                evaluateQuizSelection(button, opt, speedCurrentWord.en, "#speed-options .quiz-opt", null, false);
-            };
+            btn.onclick = () => evaluateSpeedSelection(btn, opt);
             optionsContainer.appendChild(btn);
         });
     }
@@ -1076,6 +1283,7 @@
         resetSpeedRoundUI();
     }
 
+    // --- MISSED DECK LOGIC ---
     function initMissedTrayView() {
         const container = document.getElementById("missed-deck-container");
         const emptyState = document.getElementById("missed-empty-state");
@@ -1118,7 +1326,6 @@
         frontTextEl.innerText = item.de;
         backTextEl.innerText = item.en;
         
-        // Format based on length so long words don't overflow
         if (item.de.length > 20) frontTextEl.style.fontSize = "1.5em";
         else frontTextEl.style.fontSize = "2em";
         
@@ -1139,6 +1346,7 @@
     function clearFromMissed() {
         if (missedArray.length === 0) return;
         missedArray.splice(currentMissedIndex, 1);
+        updateGlobalStatsDashboard();
         renderMissedCardItem();
     }
 </script>
