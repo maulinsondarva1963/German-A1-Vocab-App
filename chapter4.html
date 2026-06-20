@@ -920,15 +920,14 @@
             filterPanel.style.display = "none";
             statsPanel.style.display = "none";
             initMissedTrayView();
-        } else {
+        } else if (tabId === "quiz") {
             filterPanel.style.display = "block";
-            statsPanel.style.display = "grid";
-            
-            if (tabId === "flashcards") {
-                renderFlashcardView();
-            } else if (tabId === "quiz") {
-                showQuizSetup();
-            }
+            statsPanel.style.display = "none"; // Hide stats in Quiz as requested
+            applyFilters();
+        } else if (tabId === "flashcards") {
+            filterPanel.style.display = "block";
+            statsPanel.style.display = "grid"; // Show stats in Flashcards
+            applyFilters();
         }
     }
 
