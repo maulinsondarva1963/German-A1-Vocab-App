@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>German A2 Vocab Mastery - Kapitel 6</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
+
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            
+            /* Vibrant App Colors */
+            --primary: #3b82f6;
+            --quiz-color: #8b5cf6;
+            --speed-color: #f97316;
+            --missed-color: #e11d48;
+            --success-color: #10b981;
+
+            /* Tag Colors */
+            --tag-verb: #ccfbf1;
+            --tag-verb-text: #0f766e;
+            --tag-noun: #e0f2fe;
+            --tag-noun-text: #0369a1;
+            --tag-adjective: #f3e8ff;
+            --tag-adjective-text: #6b21a8;
+            --tag-other: #f1f5f9;
+            --tag-other-text: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdfa; 
+            /* Soft, engaging learning mesh gradient */
+            background-image: 
+                radial-gradient(at 40% 20%, #e0f2fe 0px, transparent 50%), 
+                radial-gradient(at 80% 0%, #fae8ff 0px, transparent 50%), 
+                radial-gradient(at 0% 50%, #fff1f2 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .app-container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 0 5px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.3em; 
+            font-weight: 900;
+            color: #0f172a;
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+
+        /* COLORFUL NAVIGATION TABS */
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 6px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 2px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.8); }
+
+        /* Specific Tab Colors when Active */
+        .tab-btn[onclick*="'flashcards'"].active { background: #dbeafe; color: #1d4ed8; border-bottom: 3px solid #3b82f6; }
+        .tab-btn[onclick*="'quiz'"].active { background: #f3e8ff; color: #6b21a8; border-bottom: 3px solid #8b5cf6; }
+        .tab-btn[onclick*="'speed'"].active { background: #ffedd5; color: #c2410c; border-bottom: 3px solid #f97316; }
+        .tab-btn[onclick*="'missed'"].active { background: #ffe4e6; color: #be123c; border-bottom: 3px solid #e11d48; }
+
+        /* CAPSULE FILTER PANEL */
+        .filter-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-size: 0.75em;
+            font-weight: 900;
+            color: #94a3b8;
+            text-transform: uppercase;
+            width: 85px;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .filter-pill {
+            padding: 6px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            background: #ffffff;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-pill.active { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
+        .filter-pill[onclick*="'verb'"].active { background: var(--tag-verb); color: var(--tag-verb-text); border-color: #5eead4; }
+        .filter-pill[onclick*="'noun'"].active { background: var(--tag-noun); color: var(--tag-noun-text); border-color: #7dd3fc; }
+        .filter-pill[onclick*="'adjective'"].active { background: var(--tag-adjective); color: var(--tag-adjective-text); border-color: #d8b4fe; }
+        .filter-pill[onclick*="'other'"].active { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
+
+        /* Setup specific pill colors */
+        .setup-pill { border-color: #e9d5ff; color: #8b5cf6; min-width: 50px; text-align: center; }
+        .setup-pill.active { background: #f3e8ff; color: #6b21a8; border-color: #a855f7; }
+
+        /* STATS COUNTER GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
+            padding: 12px 5px;
+            text-align: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .stat-box .num {
+            font-size: 1.4em;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+        .stat-box .num.blue { color: #3b82f6; }
+        .stat-box .num.green { color: #10b981; }
+        .stat-box .num.red { color: #f43f5e; }
+
+        .stat-box .lbl {
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* PANELS/SECTIONS */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* FLASHCARD STYLE */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            height: 250px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 24px;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        /* Colorful Flashcard Fronts & Backs */
+        .card-front {
+            background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%); 
+            border: 3px solid #fde68a;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%); 
+            border: 3px solid #86efac;
+            transform: rotateY(180deg);
+        }
+
+        /* Missed Deck specific card colors */
+        .missed-front {
+            background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 100%); 
+            border: 3px solid #fecdd3;
+        }
+        .missed-back {
+            background: linear-gradient(135deg, #ffffff 0%, #ffedd5 100%); 
+            border: 3px solid #fed7aa;
+            transform: rotateY(180deg);
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tag {
+            font-size: 0.7em;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .tag.verb { background: var(--tag-verb); color: var(--tag-verb-text); border: 1px solid #99f6e4; }
+        .tag.noun { background: var(--tag-noun); color: var(--tag-noun-text); border: 1px solid #bae6fd; }
+        .tag.adjective { background: var(--tag-adjective); color: var(--tag-adjective-text); border: 1px solid #e9d5ff; }
+        .tag.other { background: var(--tag-other); color: var(--tag-other-text); border: 1px solid #e2e8f0; }
+
+        .card-main-text {
+            font-size: 2em;
+            font-weight: 800;
+            word-wrap: break-word;
+            max-width: 100%;
+            padding: 10px 0;
+            color: #1e293b;
+        }
+        .card-back .card-main-text {
+            color: #047857; /* Deep green for success back */
+        }
+        .missed-back .card-main-text {
+            color: #c2410c; /* Deep orange for missed back */
+        }
+
+        .card-footer-text {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #94a3b8;
+            background: rgba(255,255,255,0.6);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ACTION NAVIGATION BUTTONS */
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1em;
+            font-weight: 800;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-dark);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .btn:active { transform: scale(0.96); }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e1;
+            color: #475569;
+        }
+        .btn.secondary:hover { background: #cbd5e1; }
+
+        .btn.success { 
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid #059669;
+        }
+        .btn.success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); }
+
+        .btn.danger { 
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3);
+            border: 2px solid #be123c;
+        }
+        .btn.danger:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(225, 29, 72, 0.4); }
+
+        .btn.quiz-action {
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            color: white;
+            border: 2px solid #7c3aed;
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        /* INTERACTIVE MCQ QUIZ AND SPEED MODES */
+        .quiz-card {
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+            border: 3px solid #e9d5ff;
+        }
+
+        .quiz-prompt {
+            font-size: 1.3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #334155;
+        }
+        .quiz-prompt span { color: var(--quiz-color); font-size: 1.2em; }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-opt {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 1em;
+            font-weight: 800;
+            text-align: left;
+            cursor: pointer;
+            color: #334155;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .quiz-opt:hover { border-color: #94a3b8; background: #f8fafc; transform: translateX(4px); }
+        .quiz-opt.correct { background: #dcfce7; border-color: #10b981; color: #047857; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); transform: scale(1.02); }
+        .quiz-opt.wrong { background: #fee2e2; border-color: #f43f5e; color: #be123c; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); }
+
+        /* Quiz Summary Styles */
+        .mistake-card {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: left;
+        }
+        .mistake-word { font-weight: 900; font-size: 1.2em; color: #1e293b; margin-bottom: 6px; }
+        .mistake-wrong { font-size: 0.9em; color: #be123c; margin-bottom: 4px; }
+        .mistake-correct { font-size: 0.9em; color: #047857; font-weight: bold; }
+
+        /* SPEED CLOCK HUD ELEMENTS */
+        #speed-game-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            border: 3px solid #fed7aa;
+        }
+
+        #speed-game-panel .quiz-prompt span { color: var(--speed-color); }
+
+        .speed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #f97316 0%, #ef4444 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            font-weight: 900;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        }
+
+        .timer-badge {
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            backdrop-filter: blur(5px);
+        }
+
+        .start-screen {
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            border: 3px solid #fed7aa;
+            border-radius: 24px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        }
+        
+        .start-screen h2 {
+            color: #ea580c;
+            font-size: 1.8em;
+            margin-top: 0;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #64748b;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed #cbd5e1;
+            border-radius: 24px;
+            font-weight: 800;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .filter-label { width: 75px; font-size: 0.7em; }
+            .card-main-text { font-size: 1.4em; }
+            .options-list { gap: 10px; }
+            .action-row { flex-direction: column; gap: 8px; }
+            .header h1 { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="header">
+        <div>
+            <h1>
+                <span style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: white; padding: 4px 10px; border-radius: 10px; font-size: 0.7em; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);">De</span>
+                A2 - Kapitel 6: Arbeitswelten
+            </h1>
+            <div class="subtitle"><span id="total-pool-count">0</span> words total</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+        <button class="tab-btn" onclick="switchTab('speed')">Speed</button>
+        <button class="tab-btn" onclick="switchTab('missed')">Missed</button>
+    </div>
+
+    <div class="filter-panel" id="filter-panel">
+        <div class="filter-row">
+            <div class="filter-label">Word Type</div>
+            <div class="filter-options">
+                <button class="filter-pill active" onclick="setWordTypeFilter('all', this)">All</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('verb', this)">Verbs</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('noun', this)">Nouns</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('adjective', this)">Adjectives</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('other', this)">Others</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid" id="stats-grid">
+        <div class="stat-box">
+            <div class="num blue" id="stat-reviewed">0/0</div>
+            <div class="lbl">reviewed</div>
+        </div>
+        <div class="stat-box">
+            <div class="num green" id="stat-knew">0</div>
+            <div class="lbl">knew it</div>
+        </div>
+        <div class="stat-box">
+            <div class="num red" id="stat-missed-count">0</div>
+            <div class="lbl">missed</div>
+        </div>
+    </div>
+
+    <div id="flashcards" class="section active">
+        <div id="fc-deck-container">
+            <div class="flashcard-wrapper" onclick="flipCard()">
+                <div class="flashcard" id="fc-anim-target">
+                    <div class="card-face card-front">
+                        <div class="card-tags">
+                            <span class="tag" id="fc-tag-type">type</span>
+                        </div>
+                        <div class="card-main-text" id="fc-front-text">Wort</div>
+                        <div class="card-footer-text">tap to reveal</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-tags">
+                            <span class="tag" id="fc-tag-type-b">type</span>
+                        </div>
+                        <div class="card-main-text" id="fc-back-text">Meaning</div>
+                        <div class="card-footer-text">Tap to see translation</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-row" style="margin-bottom: 10px;">
+                <button class="btn secondary" style="font-size: 0.9em; padding: 12px;" onclick="shuffleDeck()">🔀 Shuffle</button>
+                <button class="btn secondary" style="font-size: 0.9em; padding: 12px;" onclick="resetSession()">🔄 Reset</button>
+            </div>
+
+            <div class="action-row">
+                <button class="btn danger" onclick="markCardMissed()">❌ Missed</button>
+                <button class="btn success" onclick="markCardKnew()">✓ Knew It</button>
+            </div>
+        </div>
+
+        <div id="fc-completed-state" class="start-screen" style="display:none; margin-top: 15px;">
+            <h2 style="color: #10b981;">🎉 Ausgezeichnet! 🎉</h2>
+            <p style="color:#64748b; margin-bottom:30px; font-weight: 700;">You've completed all the flashcards in this set. Excellent work!</p>
+            <div class="action-row">
+                <button class="btn secondary" onclick="resetSession()">🔄 Start Over</button>
+                <button class="btn quiz-action" onclick="switchTab('quiz')">Take a Quiz 📝</button>
+            </div>
+        </div>
+
+        <div id="fc-empty-state" class="empty-message" style="display:none;">
+            ✨ No words match your selected filters. Try broadening your selection!
+        </div>
+    </div>
+
+    <div id="quiz" class="section">
+
+        <div id="quiz-setup-container" class="start-screen" style="border-color: #e9d5ff; background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);">
+            <h2 style="color: #8b5cf6;">📝 Quiz Setup</h2>
+            <p style="color:#64748b; margin-bottom:20px; font-weight: 700;">How many questions would you like to answer?</p>
+            
+            <div class="filter-options" style="justify-content: center; margin-bottom: 30px;">
+                <button class="filter-pill setup-pill active" onclick="selectQuizLength(20, this)">20</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength(30, this)">30</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength(40, this)">40</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength('all', this)">All</button>
+            </div>
+
+            <button class="btn quiz-action" style="width: 100%;" onclick="startNewQuiz()">Start Quiz 🚀</button>
+        </div>
+
+        <div id="quiz-header" style="display:none; justify-content:space-between; margin-bottom:15px; font-weight:800; color:#64748b; background: rgba(255,255,255,0.8); padding: 10px 15px; border-radius: 12px; border: 2px solid #e2e8f0;">
+            <span id="quiz-progress">Question 1 / 20</span>
+            <span id="quiz-score-display" style="color: #8b5cf6;">Score: 0</span>
+        </div>
+
+        <div id="quiz-game-container" class="quiz-card" style="display:none;">
+            <div class="quiz-prompt">What does "<span>Wort</span>" mean?</div>
+            <div class="options-list" id="quiz-options"></div>
+            <button class="btn quiz-action" id="quiz-next-btn" style="margin-top:20px; display:none; width: 100%;" onclick="initQuizQuestion()">Next Word →</button>
+        </div>
+
+        <div id="quiz-summary-container" class="quiz-card" style="display:none;">
+            <h2 style="color: #7c3aed; margin-top: 0;">Quiz Complete! 🎉</h2>
+            <p id="quiz-final-score" style="font-size:1.2em; font-weight:900; color: #1e293b; margin-bottom: 20px;"></p>
+            
+            <div id="quiz-mistakes-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+            
+            <div class="action-row" style="margin-top:25px;">
+                <button class="btn secondary" onclick="showQuizSetup()">New Quiz 🔄</button>
+                <button id="quiz-retake-btn" class="btn quiz-action" style="display:none;" onclick="startMistakesQuiz()">Retake Missed 📝</button>
+            </div>
+        </div>
+
+        <div id="quiz-empty-state" class="empty-message" style="display:none;">
+            ✨ No words available to generate a quiz. Check your filters!
+        </div>
+    </div>
+
+    <div id="speed" class="section">
+        <div id="speed-start-panel" class="start-screen">
+            <h2>⏱️ Speed Round</h2>
+            <p style="color:#94a3b8; margin-bottom:30px; font-weight: 700;">Race against the clock! Answer as many words as you can in 30 seconds.</p>
+            <button class="btn" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; width: 100%; box-shadow: 0 6px 15px rgba(234, 88, 12, 0.3); border: 2px solid #c2410c;" onclick="startSpeedRound()">Start Speed Run 🚀</button>
+        </div>
+        <div id="speed-game-panel" class="quiz-card" style="display:none;">
+            <div class="speed-header">
+                <div>Score: <span id="speed-score">0</span></div>
+                <div class="timer-badge">⏱️ <span id="speed-timer">30</span>s</div>
+            </div>
+            <div class="quiz-prompt" style="font-size:1.5em;">"<span>Wort</span>"</div>
+            <div class="options-list" id="speed-options"></div>
+        </div>
+    </div>
+
+    <div id="missed" class="section">
+        <div id="missed-deck-container">
+            <p style="font-size:0.9em; color:#e11d48; text-align:center; margin-bottom:15px; font-weight: 800;">Reviewing words you recently marked as missed.</p>
+            <div class="flashcard-wrapper" onclick="flipMissedCard()">
+                <div class="flashcard" id="missed-anim-target">
+                    <div class="card-face card-front missed-front">
+                        <div class="card-tags">
+                            <span class="tag" id="m-tag-type">type</span>
+                        </div>
+                        <div class="card-main-text" id="m-front-text">Wort</div>
+                        <div class="card-footer-text">tap to reveal</div>
+                    </div>
+                    <div class="card-face card-back missed-back">
+                        <div class="card-tags">
+                            <span class="tag" id="m-tag-type-b">type</span>
+                        </div>
+                        <div class="card-main-text" id="m-back-text">Meaning</div>
+                        <div class="card-footer-text">Tap to see translation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="action-row">
+                <button class="btn secondary" onclick="nextMissedCard()">Keep in List</button>
+                <button class="btn success" onclick="clearFromMissed()">Mastered & Clear ✨</button>
+            </div>
+        </div>
+        <div id="missed-empty-state" class="empty-message">
+            🎉 Amazing! Your missed words tray is completely clear!
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // COMPLETE DICTIONARY GLOSSARY MAPPED FOR A2 - Kapitel 6: Arbeitswelten
+    const database = [
+        { de: "der Ärger (Sg.)", en: "anger", type: "noun" },
+        { de: "beeilen (sich)", en: "to hurry (up)", type: "verb" },
+        { de: "das Bier, -e", en: "beer", type: "noun" },
+        { de: "klappen", en: "hier: to work", type: "verb" },
+        { de: "die Rückfahrt (Sg.)", en: "return", type: "noun" },
+        { de: "beraten", en: "to advise", type: "verb" },
+        { de: "ein|halten", en: "to adhere", type: "verb" },
+        { de: "die Tätigkeit, -en", en: "occupation", type: "noun" },
+        { de: "die Vokabel, -n", en: "word", type: "noun" },
+        { de: "die Geschäftsreise, -n", en: "business trip", type: "noun" },
+        { de: "zurück|kommen", en: "to return", type: "verb" },
+        { de: "die Hinfahrt (Sg.)", en: "journey there", type: "noun" },
+        { de: "die Bahn, -en", en: "train", type: "noun" },
+        { de: "die Bahnhofshalle, -n", en: "station hall", type: "noun" },
+        { de: "die Durchsage, -n", en: "announcement", type: "noun" },
+        { de: "der Fahrgast, \"-e", en: "passenger", type: "noun" },
+        { de: "der Fahrplan, \"-e", en: "timetable", type: "noun" },
+        { de: "der Schalter, -", en: "counter", type: "noun" },
+        { de: "der Wagen, -", en: "car", type: "noun" },
+        { de: "die Zugverbindung, -en", en: "train connection", type: "noun" },
+        { de: "einfach", en: "hier: one-way", type: "other" },
+        { de: "der Fahrkartenschalter, -", en: "booking office", type: "noun" },
+        { de: "der Gang, \"-e", en: "aisle", type: "noun" },
+        { de: "hin und zurück", en: "there and back", type: "other" },
+        { de: "die Klasse, -n", en: "class", type: "noun" },
+        { de: "nebeneinander", en: "next to each other", type: "other" },
+        { de: "das Abend-Programm, -e", en: "evening programme", type: "noun" },
+        { de: "das Album, Alben", en: "album", type: "noun" },
+        { de: "die Band, -s", en: "band", type: "noun" },
+        { de: "erleben", en: "to experience", type: "verb" },
+        { de: "die Ermäßigung, -en", en: "discount", type: "noun" },
+        { de: "der Feiertag, -e", en: "holiday", type: "noun" },
+        { de: "genau", en: "exactly", type: "other" },
+        { de: "der Klassiker, -", en: "classic", type: "noun" },
+        { de: "kommen", en: "to come", type: "verb" },
+        { de: "der Musiker, -", en: "musician (m)", type: "noun" },
+        { de: "die Musikerin, -nen", en: "musician (f)", type: "noun" },
+        { de: "der Sänger, -", en: "singer (m)", type: "noun" },
+        { de: "die Sängerin, -nen", en: "singer (f)", type: "noun" },
+        { de: "das Stadtprogramm, -e", en: "city programme", type: "noun" },
+        { de: "der Tagesgast, \"-e", en: "one-day visitor", type: "noun" },
+        { de: "der Trainer, -", en: "trainer (m)", type: "noun" },
+        { de: "die Trainerin, -nen", en: "trainer (f)", type: "noun" },
+        { de: "die Trattoria, Trattorien", en: "trattoria", type: "noun" },
+        { de: "unter (+ D.)", en: "hier: at", type: "other" },
+        { de: "wofür", en: "what", type: "other" },
+        { de: "das Artikelwort, \"-er", en: "determiner", type: "noun" },
+        { de: "professionell", en: "professional", type: "adjective" },
+        { de: "fantastisch", en: "fantastic", type: "adjective" },
+        { de: "das Kunstmuseum, Kunstmuseen", en: "art museum", type: "noun" },
+        { de: "der Kursort, -e", en: "location of the course", type: "noun" },
+        { de: "preiswert", en: "cheap", type: "adjective" },
+        { de: "die Arztkleidung (Sg.)", en: "doctor's uniforms", type: "noun" },
+        { de: "auf keinen Fall", en: "under no circumstances", type: "other" },
+        { de: "bereuen", en: "to regret", type: "verb" },
+        { de: "beruflich", en: "professional", type: "adjective" },
+        { de: "der Berufswechsel, -", en: "career change", type: "noun" },
+        { de: "der Busfahrer, -", en: "bus driver (m)", type: "noun" },
+        { de: "die Busfahrerin, -nen", en: "bus driver (f)", type: "noun" },
+        { de: "die Chance, -n", en: "opportunity", type: "noun" },
+        { de: "einige", en: "some", type: "other" },
+        { de: "das Englisch-Studium (Sg.)", en: "English degree", type: "noun" },
+        { de: "erfolgreich", en: "successful", type: "adjective" },
+        { de: "der Fernfahrer, -", en: "long-distance lorry driver (m)", type: "noun" },
+        { de: "die Fernfahrerin, -nen", en: "long-distance lorry driver (f)", type: "noun" },
+        { de: "finanziell", en: "financial", type: "adjective" },
+        { de: "die Freiheit (Sg.)", en: "freedom", type: "noun" },
+        { de: "das Gehalt, \"-er", en: "salary", type: "noun" },
+        { de: "der Herzchirurg, -en", en: "heart surgeon (m)", type: "noun" },
+        { de: "die Herzchirurgin, -nen", en: "heart surgeon (f)", type: "noun" },
+        { de: "das Herzzentrum, Herzzentren", en: "cardiac centre", type: "noun" },
+        { de: "der Jobwechsel, -", en: "job change", type: "noun" },
+        { de: "komplett", en: "complete", type: "adjective" },
+        { de: "der Lastwagen, -", en: "truck", type: "noun" },
+        { de: "der Leiter, -", en: "director (m)", type: "noun" },
+        { de: "die Leiterin, -nen", en: "director (f)", type: "noun" },
+        { de: "der Lkw, -s", en: "truck", type: "noun" },
+        { de: "der Mediziner, -", en: "doctor (m)", type: "noun" },
+        { de: "die Medizinerin, -nen", en: "doctor (f)", type: "noun" },
+        { de: "mehr", en: "longer", type: "other" },
+        { de: "möglich", en: "possible", type: "adjective" },
+        { de: "der Neuanfang, \"-e", en: "new beginning", type: "noun" },
+        { de: "nun", en: "now", type: "other" },
+        { de: "nutzen", en: "hier: to take", type: "verb" },
+        { de: "der Oberarzt, \"-e", en: "consultant doctor (m)", type: "noun" },
+        { de: "die Oberärztin, -nen", en: "consultant doctor (f)", type: "noun" },
+        { de: "der Operationssaal, \"-e", en: "operating theatre", type: "noun" },
+        { de: "das Plastik (Sg.)", en: "plastic", type: "noun" },
+        { de: "das Risiko, Risiken", en: "risk", type: "noun" },
+        { de: "selbstständig", en: "independent", type: "adjective" },
+        { de: "der Übersetzer, -", en: "translator (m)", type: "noun" },
+        { de: "die Übersetzerin, -nen", en: "translator (f)", type: "noun" },
+        { de: "die Umwelt (Sg.)", en: "environment", type: "noun" },
+        { de: "komisch", en: "funny", type: "adjective" },
+        { de: "die Altersangabe, -n", en: "age statement", type: "noun" },
+        { de: "das Präsens (Sg.)", en: "present tense", type: "noun" },
+        { de: "schwanger", en: "pregnant", type: "adjective" },
+        { de: "der Berufswunsch, \"-e", en: "career goal", type: "noun" },
+        { de: "der Tiertrainer, -", en: "animal trainer (m)", type: "noun" },
+        { de: "die Tiertrainerin, -nen", en: "animal trainer (f)", type: "noun" },
+        { de: "häufig", en: "often", type: "adjective" },
+        { de: "hintereinander", en: "consecutively", type: "other" },
+        { de: "der Schritt, -e", en: "step", type: "noun" },
+        { de: "mit|helfen", en: "to assist", type: "verb" },
+        { de: "der Anrufbeantworter, -", en: "answering machine", type: "noun" },
+        { de: "bereit|legen", en: "to keep ready", type: "verb" },
+        { de: "das Blatt, \"-er", en: "sheet of paper", type: "noun" },
+        { de: "deutlich", en: "distinct", type: "adjective" },
+        { de: "hektisch", en: "hectic", type: "adjective" },
+        { de: "konzentrieren (sich)", en: "to concentrate", type: "verb" },
+        { de: "lächeln", en: "to smile", type: "verb" },
+        { de: "stören", en: "to disturb", type: "verb" },
+        { de: "das Telefonat, -e", en: "telephone", type: "noun" },
+        { de: "der Kurspartner, -", en: "course partner (m)", type: "noun" },
+        { de: "die Kurspartnerin, -nen", en: "course partner (f)", type: "noun" },
+        { de: "also gut", en: "very well", type: "other" },
+        { de: "der Anrufer, -", en: "caller (m)", type: "noun" },
+        { de: "die Anruferin, -nen", en: "caller (f)", type: "noun" },
+        { de: "aus|richten", en: "to pass on sth to sb", type: "verb" },
+        { de: "außer Haus", en: "out of office", type: "other" },
+        { de: "hinterlassen", en: "to leave (behind)", type: "verb" },
+        { de: "in Ordnung", en: "all right", type: "other" },
+        { de: "die Rückmeldung, -en", en: "response", type: "noun" },
+        { de: "zurück|rufen", en: "to call sb back", type: "verb" },
+        { de: "verändern", en: "to change", type: "verb" },
+        { de: "das Arbeitsleben (Sg.)", en: "professional life", type: "noun" },
+        { de: "der Arbeitstag, -e", en: "workday", type: "noun" },
+        { de: "der Austausch (Sg.)", en: "exchange", type: "noun" },
+        { de: "befristet", en: "temporary", type: "adjective" },
+        { de: "der Betrieb, -e", en: "firm", type: "noun" },
+        { de: "dazu|kommen", en: "to be added", type: "verb" },
+        { de: "die Digitalisierung (Sg.)", en: "digitisation", type: "noun" },
+        { de: "erreichbar", en: "reachable", type: "adjective" },
+        { de: "die Fabrik, -en", en: "factory", type: "noun" },
+        { de: "fest", en: "fixed", type: "adjective" },
+        { de: "das Grundeinkommen, -", en: "basic income", type: "noun" },
+        { de: "die Hausarbeit, -en", en: "housework", type: "noun" },
+        { de: "das Jahrhundert, -e", en: "century", type: "noun" },
+        { de: "die Kompetenz, -en", en: "expertise", type: "noun" },
+        { de: "lebenslang", en: "lifelong", type: "adjective" },
+        { de: "die Maschine, -n", en: "machine", type: "noun" },
+        { de: "mobil", en: "mobile", type: "adjective" },
+        { de: "problemlos", en: "unproblematic", type: "adjective" },
+        { de: "der Roboter, -", en: "robot", type: "noun" },
+        { de: "die Telefonkonferenz, -en", en: "conference call", type: "noun" },
+        { de: "unnötig", en: "unnecessary", type: "adjective" },
+        { de: "die Vernetzung (Sg.)", en: "networking", type: "noun" },
+        { de: "die Videokonferenz, -en", en: "video conference", type: "noun" },
+        { de: "virtuell", en: "virtual", type: "adjective" },
+        { de: "das Wissen (Sg.)", en: "knowledge", type: "noun" },
+        { de: "zu|nehmen", en: "to increase", type: "verb" },
+        { de: "die Zusammenarbeit (Sg.)", en: "cooperation", type: "noun" },
+        { de: "das Schlüsselwort, \"-er", en: "keyword", type: "noun" },
+        { de: "die Verwendung (Sg.)", en: "usage", type: "noun" }
+    ];
+
+    let currentTab = "flashcards";
+    let filterType = "all";
+    
+    let filteredPool = [];
+    let activeCardIndex = 0;
+    
+    let totalReviewedCount = 0;
+    let knewItCount = 0;
+    let missedArray = [];
+    let currentMissedIndex = 0;
+
+    // --- Quiz Mode Variables ---
+    let selectedQuizLength = 20;
+    let quizPool = [];
+    let quizSessionCount = 0;
+    let quizMaxQuestions = 20;
+    let quizCurrentScore = 0;
+    let quizMistakes = [];
+    let quizActiveItem = null;
+
+    // --- Speed Mode Variables ---
+    let speedTimerInterval = null;
+    let speedTimeLeft = 30;
+    let speedScoreValue = 0;
+    let speedCurrentWord = null;
+
+    window.onload = () => {
+        document.getElementById("total-pool-count").innerText = database.length;
+        applyFilters();
+    };
+
+    function switchTab(tabId) {
+        currentTab = tabId;
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+
+        const filterPanel = document.getElementById("filter-panel");
+        const statsPanel = document.getElementById("stats-grid");
+
+        clearInterval(speedTimerInterval);
+
+        if (tabId === "speed") {
+            filterPanel.style.display = "none";
+            statsPanel.style.display = "none";
+            resetSpeedRoundUI();
+        } else if (tabId === "missed") {
+            filterPanel.style.display = "none";
+            statsPanel.style.display = "none";
+            initMissedTrayView();
+        } else if (tabId === "quiz") {
+            filterPanel.style.display = "block";
+            statsPanel.style.display = "none"; // Hide stats in Quiz
+            applyFilters();
+        } else if (tabId === "flashcards") {
+            filterPanel.style.display = "block";
+            statsPanel.style.display = "grid"; // Show stats in Flashcards
+            applyFilters();
+        }
+    }
+
+    function setWordTypeFilter(type, element) {
+        setSelectedPill(element);
+        filterType = type;
+        applyFilters();
+    }
+
+    function setSelectedPill(el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.filter-pill:not(.setup-pill)').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function applyFilters() {
+        filteredPool = database.filter(item => {
+            return (filterType === "all" || item.type === filterType);
+        });
+
+        activeCardIndex = 0;
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        
+        updateGlobalStatsDashboard();
+
+        if (currentTab === "flashcards") {
+            renderFlashcardView();
+        } else if (currentTab === "quiz") {
+            showQuizSetup();
+        }
+    }
+    
+    function shuffleDeck() {
+        if (filteredPool.length === 0) return;
+        
+        for (let i = filteredPool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredPool[i], filteredPool[j]] = [filteredPool[j], filteredPool[i]];
+        }
+        
+        activeCardIndex = 0;
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        
+        updateGlobalStatsDashboard();
+        renderFlashcardView();
+    }
+
+    function resetSession() {
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        missedArray = [];
+        currentMissedIndex = 0;
+        applyFilters();
+    }
+
+    function updateGlobalStatsDashboard() {
+        document.getElementById("stat-reviewed").innerText = `${totalReviewedCount}/${filteredPool.length}`;
+        document.getElementById("stat-knew").innerText = knewItCount;
+        document.getElementById("stat-missed-count").innerText = missedArray.length;
+    }
+
+    // --- FLASHCARD LOGIC ---
+    function renderFlashcardView() {
+        const deckContainer = document.getElementById("fc-deck-container");
+        const emptyState = document.getElementById("fc-empty-state");
+        const completedState = document.getElementById("fc-completed-state");
+        
+        if (completedState) completedState.style.display = "none";
+
+        if (filteredPool.length === 0) {
+            deckContainer.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        if (totalReviewedCount >= filteredPool.length) {
+            deckContainer.style.display = "none";
+            emptyState.style.display = "none";
+            completedState.style.display = "block";
+            return;
+        }
+
+        deckContainer.style.display = "block";
+        emptyState.style.display = "none";
+
+        const item = filteredPool[activeCardIndex];
+        document.getElementById("fc-anim-target").classList.remove("flipped");
+
+        const typeTag = document.getElementById("fc-tag-type");
+        const typeTagB = document.getElementById("fc-tag-type-b");
+
+        typeTag.innerText = item.type;
+        typeTag.className = `tag ${item.type}`;
+        typeTagB.innerText = item.type;
+        typeTagB.className = `tag ${item.type}`;
+
+        const frontTextEl = document.getElementById("fc-front-text");
+        const backTextEl = document.getElementById("fc-back-text");
+        
+        frontTextEl.innerText = item.de;
+        backTextEl.innerText = item.en;
+        
+        if (item.de.length > 20) frontTextEl.style.fontSize = "1.5em";
+        else frontTextEl.style.fontSize = "2em";
+        
+        if (item.en.length > 25) backTextEl.style.fontSize = "1.3em";
+        else backTextEl.style.fontSize = "2em";
+    }
+
+    function flipCard() {
+        document.getElementById("fc-anim-target").classList.toggle("flipped");
+    }
+
+    function advanceDeckNextPointer() {
+        if (filteredPool.length === 0) return;
+        
+        if (totalReviewedCount < filteredPool.length) {
+            totalReviewedCount++;
+        }
+        
+        updateGlobalStatsDashboard();
+
+        if (totalReviewedCount >= filteredPool.length) {
+            document.getElementById("fc-deck-container").style.display = "none";
+            document.getElementById("fc-completed-state").style.display = "block";
+            return;
+        }
+
+        activeCardIndex = (activeCardIndex + 1) % filteredPool.length;
+        renderFlashcardView();
+    }
+
+    function markCardKnew() {
+        if (totalReviewedCount < filteredPool.length) {
+            knewItCount++;
+        }
+        advanceDeckNextPointer();
+    }
+
+    function markCardMissed() {
+        const currentItem = filteredPool[activeCardIndex];
+        if (!missedArray.some(item => item.de === currentItem.de)) {
+            missedArray.push(currentItem);
+        }
+        advanceDeckNextPointer();
+    }
+
+    // --- NEW QUIZ LOGIC WITH SETUP SCREEN ---
+    
+    function selectQuizLength(length, element) {
+        selectedQuizLength = length;
+        const parent = element.parentElement;
+        parent.querySelectorAll('.setup-pill').forEach(p => p.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function showQuizSetup() {
+        document.getElementById("quiz-game-container").style.display = "none";
+        document.getElementById("quiz-header").style.display = "none";
+        document.getElementById("quiz-summary-container").style.display = "none";
+        
+        const setupContainer = document.getElementById("quiz-setup-container");
+        const emptyState = document.getElementById("quiz-empty-state");
+
+        if (filteredPool.length === 0) {
+            setupContainer.style.display = "none";
+            emptyState.style.display = "block";
+        } else {
+            emptyState.style.display = "none";
+            setupContainer.style.display = "block";
+        }
+    }
+
+    function startNewQuiz() {
+        quizPool = [...filteredPool].sort(() => Math.random() - 0.5);
+        
+        if (selectedQuizLength === 'all') {
+            quizMaxQuestions = quizPool.length;
+        } else {
+            quizMaxQuestions = Math.min(selectedQuizLength, quizPool.length);
+        }
+
+        quizSessionCount = 0;
+        quizCurrentScore = 0;
+        quizMistakes = [];
+
+        launchQuizUI();
+    }
+
+    function startMistakesQuiz() {
+        quizPool = quizMistakes.map(m => m.item).sort(() => Math.random() - 0.5);
+        quizMaxQuestions = quizPool.length;
+        quizSessionCount = 0;
+        quizCurrentScore = 0;
+        quizMistakes = [];
+
+        launchQuizUI();
+    }
+
+    function launchQuizUI() {
+        document.getElementById("quiz-setup-container").style.display = "none";
+        document.getElementById("quiz-summary-container").style.display = "none";
+        
+        const gameContainer = document.getElementById("quiz-game-container");
+        const header = document.getElementById("quiz-header");
+
+        if (quizPool.length === 0) {
+            gameContainer.style.display = "none";
+            header.style.display = "none";
+            return;
+        }
+
+        gameContainer.style.display = "block";
+        header.style.display = "flex";
+
+        initQuizQuestion();
+    }
+
+    function initQuizQuestion() {
+        if (quizSessionCount >= quizMaxQuestions) {
+            showQuizSummary();
+            return;
+        }
+
+        quizSessionCount++;
+        document.getElementById("quiz-progress").innerText = `Question ${quizSessionCount} / ${quizMaxQuestions}`;
+        document.getElementById("quiz-score-display").innerText = `Score: ${quizCurrentScore}`;
+        
+        document.getElementById("quiz-next-btn").style.display = "none";
+
+        quizActiveItem = quizPool[quizSessionCount - 1];
+        document.querySelector("#quiz-game-container .quiz-prompt span").innerText = quizActiveItem.de;
+
+        let options = [quizActiveItem.en];
+        // FAIL-SAFE for infinite loop when multiple words have the same translation
+        let maxAttempts = 50; 
+        
+        while (options.length < 4 && maxAttempts > 0) {
+            maxAttempts--;
+            let randItem = database[Math.floor(Math.random() * database.length)];
+            if (randItem && randItem.en && !options.includes(randItem.en)) {
+                options.push(randItem.en);
+            }
+        }
+        
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsBox = document.getElementById("quiz-options");
+        optionsBox.innerHTML = "";
+
+        options.forEach(opt => {
+            const button = document.createElement("button");
+            button.className = "quiz-opt";
+            button.innerText = opt;
+            button.onclick = () => handleQuizSelection(button, opt);
+            optionsBox.appendChild(button);
+        });
+    }
+
+    function handleQuizSelection(selectedBtn, chosenValue) {
+        const correctValue = quizActiveItem.en;
+        const allButtons = document.querySelectorAll("#quiz-options .quiz-opt");
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (chosenValue === correctValue) {
+            selectedBtn.classList.add("correct");
+            quizCurrentScore++;
+            document.getElementById("quiz-score-display").innerText = `Score: ${quizCurrentScore}`;
+        } else {
+            selectedBtn.classList.add("wrong");
+            allButtons.forEach(btn => {
+                if (btn.innerText === correctValue) btn.classList.add("correct");
+            });
+
+            quizMistakes.push({
+                item: quizActiveItem,
+                de: quizActiveItem.de,
+                userAns: chosenValue,
+                correctAns: correctValue
+            });
+
+            if (!missedArray.some(m => m.de === quizActiveItem.de)) {
+                missedArray.push(quizActiveItem);
+                updateGlobalStatsDashboard();
+            }
+        }
+
+        document.getElementById("quiz-next-btn").style.display = "block";
+    }
+
+    function showQuizSummary() {
+        document.getElementById("quiz-game-container").style.display = "none";
+        document.getElementById("quiz-header").style.display = "none";
+        
+        const summaryContainer = document.getElementById("quiz-summary-container");
+        summaryContainer.style.display = "block";
+
+        document.getElementById("quiz-final-score").innerText = `You scored ${quizCurrentScore} out of ${quizMaxQuestions}!`;
+
+        const mistakesList = document.getElementById("quiz-mistakes-list");
+        const retakeBtn = document.getElementById("quiz-retake-btn");
+        
+        if (quizMistakes.length === 0) {
+            mistakesList.innerHTML = "<div style='color:#10b981; font-weight:800; padding:20px; background:#dcfce7; border-radius:12px; border:2px solid #86efac;'>Perfect score! No mistakes made. 🌟</div>";
+            retakeBtn.style.display = "none";
+        } else {
+            let html = "<h3 style='color:#e11d48; font-size:1.1em; margin-bottom:5px; text-align:left;'>Words to Review:</h3>";
+            quizMistakes.forEach(m => {
+                html += `
+                <div class="mistake-card">
+                    <div class="mistake-word">${m.de}</div>
+                    <div class="mistake-wrong">❌ You chose: <strong>${m.userAns}</strong></div>
+                    <div class="mistake-correct">✅ Correct: ${m.correctAns}</div>
+                </div>`;
+            });
+            mistakesList.innerHTML = html;
+            retakeBtn.style.display = "block";
+        }
+    }
+
+    // --- SPEED LOGIC (INFINITE CLOCK-BASED) ---
+    function evaluateSpeedSelection(selectedBtn, chosenValue) {
+        const correctValue = speedCurrentWord.en;
+        const allButtons = document.querySelectorAll("#speed-options .quiz-opt");
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (chosenValue === correctValue) {
+            selectedBtn.classList.add("correct");
+            speedScoreValue += 2; 
+        } else {
+            selectedBtn.classList.add("wrong");
+            allButtons.forEach(btn => {
+                if (btn.innerText === correctValue) btn.classList.add("correct");
+            });
+            speedTimeLeft = Math.max(0, speedTimeLeft - 3);
+            document.getElementById("speed-timer").innerText = speedTimeLeft;
+        }
+
+        document.getElementById("speed-score").innerText = speedScoreValue;
+        setTimeout(() => { if (speedTimeLeft > 0) processNextSpeedItem(); }, 800);
+    }
+
+    function resetSpeedRoundUI() {
+        document.getElementById("speed-start-panel").style.display = "block";
+        document.getElementById("speed-game-panel").style.display = "none";
+    }
+
+    function startSpeedRound() {
+        document.getElementById("speed-start-panel").style.display = "none";
+        document.getElementById("speed-game-panel").style.display = "block";
+
+        speedTimeLeft = 30;
+        speedScoreValue = 0;
+        document.getElementById("speed-score").innerText = speedScoreValue;
+        document.getElementById("speed-timer").innerText = speedTimeLeft;
+
+        processNextSpeedItem();
+
+        speedTimerInterval = setInterval(() => {
+            speedTimeLeft--;
+            document.getElementById("speed-timer").innerText = speedTimeLeft;
+
+            if (speedTimeLeft <= 0) {
+                clearInterval(speedTimerInterval);
+                concludeSpeedSession();
+            }
+        }, 1000);
+    }
+
+    function processNextSpeedItem() {
+        if (database.length === 0) return;
+        
+        speedCurrentWord = database[Math.floor(Math.random() * database.length)];
+        document.querySelector("#speed-game-panel .quiz-prompt span").innerText = speedCurrentWord.de;
+
+        let options = [speedCurrentWord.en];
+        // FAIL-SAFE for infinite loop when multiple words have the same translation
+        let maxAttempts = 50; 
+        
+        while (options.length < 4 && maxAttempts > 0) {
+            maxAttempts--;
+            let randItem = database[Math.floor(Math.random() * database.length)];
+            if (randItem && randItem.en && !options.includes(randItem.en)) {
+                options.push(randItem.en);
+            }
+        }
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsContainer = document.getElementById("speed-options");
+        optionsContainer.innerHTML = "";
+
+        options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-opt";
+            btn.innerText = opt;
+            btn.onclick = () => evaluateSpeedSelection(btn, opt);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function concludeSpeedSession() {
+        alert(`🏁 Time's up! You scored ${speedScoreValue} points!`);
+        resetSpeedRoundUI();
+    }
+
+    // --- MISSED DECK LOGIC ---
+    function initMissedTrayView() {
+        const container = document.getElementById("missed-deck-container");
+        const emptyState = document.getElementById("missed-empty-state");
+
+        if (missedArray.length === 0) {
+            container.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        container.style.display = "block";
+        emptyState.style.display = "none";
+        currentMissedIndex = 0;
+
+        renderMissedCardItem();
+    }
+
+    function renderMissedCardItem() {
+        if (missedArray.length === 0) {
+            initMissedTrayView();
+            return;
+        }
+        
+        if (currentMissedIndex >= missedArray.length) currentMissedIndex = 0;
+        const item = missedArray[currentMissedIndex];
+
+        document.getElementById("missed-anim-target").classList.remove("flipped");
+
+        const mType = document.getElementById("m-tag-type");
+        const mTypeB = document.getElementById("m-tag-type-b");
+
+        mType.innerText = item.type;
+        mType.className = `tag ${item.type}`;
+        mTypeB.innerText = item.type;
+        mTypeB.className = `tag ${item.type}`;
+
+        const frontTextEl = document.getElementById("m-front-text");
+        const backTextEl = document.getElementById("m-back-text");
+        
+        frontTextEl.innerText = item.de;
+        backTextEl.innerText = item.en;
+        
+        // Format based on length so long words don't overflow
+        if (item.de.length > 20) frontTextEl.style.fontSize = "1.5em";
+        else frontTextEl.style.fontSize = "2em";
+        
+        if (item.en.length > 25) backTextEl.style.fontSize = "1.3em";
+        else backTextEl.style.fontSize = "2em";
+    }
+
+    function flipMissedCard() {
+        document.getElementById("missed-anim-target").classList.toggle("flipped");
+    }
+
+    function nextMissedCard() {
+        if (missedArray.length === 0) return;
+        currentMissedIndex = (currentMissedIndex + 1) % missedArray.length;
+        renderMissedCardItem();
+    }
+
+    function clearFromMissed() {
+        if (missedArray.length === 0) return;
+        missedArray.splice(currentMissedIndex, 1);
+        updateGlobalStatsDashboard();
+        renderMissedCardItem();
+    }
+</script>
+</body>
+</html>
