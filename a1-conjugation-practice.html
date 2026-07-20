@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>German A1 Verb Conjugation Mastery</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
+
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            
+            /* Vibrant App Colors */
+            --primary: #3b82f6;
+            --quiz-color: #8b5cf6;
+            --speed-color: #f97316;
+            --missed-color: #e11d48;
+            --success-color: #10b981;
+
+            /* Tag Colors */
+            --tag-regular: #ccfbf1;
+            --tag-regular-text: #0f766e;
+            --tag-irregular: #ffe4e6;
+            --tag-irregular-text: #be123c;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdfa; 
+            background-image: 
+                radial-gradient(at 40% 20%, #e0f2fe 0px, transparent 50%), 
+                radial-gradient(at 80% 0%, #fae8ff 0px, transparent 50%), 
+                radial-gradient(at 0% 50%, #fff1f2 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .app-container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 0 5px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .header .subtitle {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 800;
+        }
+
+        /* NAVIGATION TABS */
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 6px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 2px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.8); }
+
+        .tab-btn[onclick*="'flashcards'"].active { background: #dbeafe; color: #1d4ed8; border-bottom: 3px solid #3b82f6; }
+        .tab-btn[onclick*="'quiz'"].active { background: #f3e8ff; color: #6b21a8; border-bottom: 3px solid #8b5cf6; }
+        .tab-btn[onclick*="'speed'"].active { background: #ffedd5; color: #c2410c; border-bottom: 3px solid #f97316; }
+        .tab-btn[onclick*="'missed'"].active { background: #ffe4e6; color: #be123c; border-bottom: 3px solid #e11d48; }
+
+        /* FILTER PANEL */
+        .filter-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-size: 0.75em;
+            font-weight: 900;
+            color: #94a3b8;
+            text-transform: uppercase;
+            width: 85px;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .filter-pill {
+            padding: 6px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            background: #ffffff;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-pill.active { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
+        .filter-pill[onclick*="'regular'"].active { background: var(--tag-regular); color: var(--tag-regular-text); border-color: #5eead4; }
+        .filter-pill[onclick*="'irregular'"].active { background: var(--tag-irregular); color: var(--tag-irregular-text); border-color: #fda4af; }
+
+        .setup-pill { border-color: #e9d5ff; color: #8b5cf6; min-width: 50px; text-align: center; }
+        .setup-pill.active { background: #f3e8ff; color: #6b21a8; border-color: #a855f7; }
+
+        /* STATS COUNTER GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
+            padding: 12px 5px;
+            text-align: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .stat-box .num {
+            font-size: 1.4em;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+        .stat-box .num.blue { color: #3b82f6; }
+        .stat-box .num.green { color: #10b981; }
+        .stat-box .num.red { color: #f43f5e; }
+
+        .stat-box .lbl {
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* PANELS/SECTIONS */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* FLASHCARD STYLE */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            height: 380px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 24px;
+            text-align: center;
+            padding: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            overflow-y: auto;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%); 
+            border: 3px solid #bae6fd;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #ffffff 0%, #dcfce7 100%); 
+            border: 3px solid #86efac;
+            transform: rotateY(180deg);
+        }
+
+        .missed-front {
+            background: linear-gradient(135deg, #ffffff 0%, #ffe4e6 100%); 
+            border: 3px solid #fecdd3;
+            justify-content: center;
+            gap: 30px;
+        }
+        .missed-back {
+            background: linear-gradient(135deg, #ffffff 0%, #ffedd5 100%); 
+            border: 3px solid #fed7aa;
+            transform: rotateY(180deg);
+        }
+
+        .card-tags { display: flex; gap: 6px; width: 100%; justify-content: center; }
+
+        .tag {
+            font-size: 0.7em;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tag.regular { background: var(--tag-regular); color: var(--tag-regular-text); border: 1px solid #99f6e4; }
+        .tag.irregular { background: var(--tag-irregular); color: var(--tag-irregular-text); border: 1px solid #fecdd3; }
+
+        .card-main-text {
+            font-size: 2.2em;
+            font-weight: 900;
+            color: #1e293b;
+        }
+        .card-meaning-text {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* CONJUGATION DISPLAY GRID */
+        .conjugation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .conj-item {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 6px 10px;
+            text-align: left;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 0.9em;
+        }
+
+        .conj-item .pronoun {
+            font-size: 0.75em;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .conj-item .form-val {
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .past-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .past-box {
+            flex: 1;
+            background: rgba(255,255,255,0.85);
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 0.85em;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .past-box .past-lbl { font-size: 0.7em; font-weight:900; color: var(--text-muted); text-transform:uppercase; }
+        .past-box .past-val { font-weight:800; color:#1e293b; margin-top:2px; }
+
+        .card-footer-text {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #94a3b8;
+            background: rgba(255,255,255,0.6);
+            padding: 4px 12px;
+            border-radius: 20px;
+            width: fit-content;
+            margin-top: auto;
+        }
+
+        /* ACTION NAVIGATION BUTTONS */
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1em;
+            font-weight: 800;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-dark);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .btn:active { transform: scale(0.96); }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .btn.success { 
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid #059669;
+        }
+
+        .btn.danger { 
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3);
+            border: 2px solid #be123c;
+        }
+
+        .btn.quiz-action {
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            color: white;
+            border: 2px solid #7c3aed;
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        /* INTERACTIVE MCQ QUIZ AND SPEED MODES */
+        .quiz-card {
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+            border: 3px solid #e9d5ff;
+        }
+
+        .quiz-prompt {
+            font-size: 1.3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #334155;
+        }
+        .quiz-prompt span { color: var(--quiz-color); font-size: 1.2em; font-weight:900; }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-opt {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 1em;
+            font-weight: 800;
+            text-align: left;
+            cursor: pointer;
+            color: #334155;
+            transition: all 0.2s;
+        }
+        .quiz-opt:hover { border-color: #94a3b8; background: #f8fafc; transform: translateX(4px); }
+        .quiz-opt.correct { background: #dcfce7; border-color: #10b981; color: #047857; transform: scale(1.02); }
+        .quiz-opt.wrong { background: #fee2e2; border-color: #f43f5e; color: #be123c; }
+
+        .mistake-card {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: left;
+        }
+        .mistake-word { font-weight: 900; font-size: 1.2em; color: #1e293b; margin-bottom: 6px; }
+        .mistake-wrong { font-size: 0.9em; color: #be123c; margin-bottom: 4px; }
+        .mistake-correct { font-size: 0.9em; color: #047857; font-weight: bold; }
+
+        #speed-game-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            border: 3px solid #fed7aa;
+        }
+        #speed-game-panel .quiz-prompt span { color: var(--speed-color); }
+
+        .speed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #f97316 0%, #ef4444 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .timer-badge {
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .start-screen {
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            border: 3px solid #fed7aa;
+            border-radius: 24px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .start-screen h2 { color: #ea580c; font-size: 1.8em; margin-top: 0; }
+
+        .empty-message {
+            text-align: center;
+            color: #64748b;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed #cbd5e1;
+            border-radius: 24px;
+            font-weight: 800;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 8px; }
+            .flashcard-wrapper { height: 440px; }
+            .conjugation-grid { grid-template-columns: 1fr; gap: 4px; }
+            .action-row { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="header">
+        <div>
+            <h1 style="display: flex; align-items: center; gap: 10px;">
+                <span style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: white; padding: 4px 10px; border-radius: 10px; font-size: 0.7em;">De</span>
+                A1 Verb Conjugations
+            </h1>
+            <div class="subtitle"><span id="total-pool-count">0</span> Verbs Loaded</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+        <button class="tab-btn" onclick="switchTab('speed')">Speed</button>
+        <button class="tab-btn" onclick="switchTab('missed')">Missed</button>
+    </div>
+
+    <div class="filter-panel" id="filter-panel">
+        <div class="filter-row">
+            <div class="filter-label">Verb Type</div>
+            <div class="filter-options">
+                <button class="filter-pill active" onclick="setWordTypeFilter('all', this)">All</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('regular', this)">Regular</button>
+                <button class="filter-pill" onclick="setWordTypeFilter('irregular', this)">Irregular/Mixed</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid" id="stats-grid">
+        <div class="stat-box">
+            <div class="num blue" id="stat-reviewed">0/0</div>
+            <div class="lbl">reviewed</div>
+        </div>
+        <div class="stat-box">
+            <div class="num green" id="stat-knew">0</div>
+            <div class="lbl">knew it</div>
+        </div>
+        <div class="stat-box">
+            <div class="num red" id="stat-missed-count">0</div>
+            <div class="lbl">missed</div>
+        </div>
+    </div>
+
+    <!-- FLASHCARDS TAB -->
+    <div id="flashcards" class="section active">
+        <div id="fc-deck-container">
+            <div class="flashcard-wrapper" onclick="flipCard()">
+                <div class="flashcard" id="fc-anim-target">
+                    <div class="card-face card-front">
+                        <div class="card-tags"><span class="tag" id="fc-tag-type">type</span></div>
+                        <div class="card-main-text" id="fc-front-text">Verb</div>
+                        <div class="card-meaning-text" id="fc-meaning-text">Meaning</div>
+                        <div class="card-footer-text">tap to reveal forms</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-tags"><span class="tag" id="fc-tag-type-b">type</span></div>
+                        <div style="font-size:1.3em; font-weight:900; color:#047857;" id="fc-back-title">Verb</div>
+                        <div style="font-size:0.9em; color:var(--text-muted); font-weight:700; margin-bottom:10px;" id="fc-back-meaning">meaning</div>
+                        
+                        <div class="conjugation-grid" id="fc-conjugation-grid"></div>
+                        <div class="past-row" id="fc-past-row"></div>
+
+                        <div class="card-footer-text">Tap to turn back</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-row" style="margin-bottom: 10px;">
+                <button class="btn secondary" style="font-size: 0.9em; padding: 12px;" onclick="shuffleDeck()">🔀 Shuffle</button>
+                <button class="btn secondary" style="font-size: 0.9em; padding: 12px;" onclick="resetSession()">🔄 Reset</button>
+            </div>
+
+            <div class="action-row">
+                <button class="btn danger" onclick="markCardMissed()">❌ Missed</button>
+                <button class="btn success" onclick="markCardKnew()">✓ Knew It</button>
+            </div>
+        </div>
+
+        <div id="fc-completed-state" class="start-screen" style="display:none; margin-top: 15px;">
+            <h2 style="color: #10b981;">🎉 Ausgezeichnet! 🎉</h2>
+            <p style="color:#64748b; margin-bottom:30px; font-weight: 700;">You've reviewed all the verbs in this set!</p>
+            <div class="action-row">
+                <button class="btn secondary" onclick="resetSession()">🔄 Start Over</button>
+                <button class="btn quiz-action" onclick="switchTab('quiz')">Take a Quiz 📝</button>
+            </div>
+        </div>
+
+        <div id="fc-empty-state" class="empty-message" style="display:none;">
+            ✨ No verbs match your selected filters.
+        </div>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div id="quiz" class="section">
+        <div id="quiz-setup-container" class="start-screen" style="border-color: #e9d5ff; background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);">
+            <h2 style="color: #8b5cf6;">📝 Quiz Setup</h2>
+            <p style="color:#64748b; margin-bottom:20px; font-weight: 700;">How many verbs would you like to be tested on?</p>
+            
+            <div class="filter-options" style="justify-content: center; margin-bottom: 30px;">
+                <button class="filter-pill setup-pill active" onclick="selectQuizLength(10, this)">10</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength(20, this)">20</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength(30, this)">30</button>
+                <button class="filter-pill setup-pill" onclick="selectQuizLength('all', this)">All</button>
+            </div>
+
+            <button class="btn quiz-action" style="width: 100%;" onclick="startNewQuiz()">Start Quiz 🚀</button>
+        </div>
+
+        <div id="quiz-header" style="display:none; justify-content:space-between; margin-bottom:15px; font-weight:800; color:#64748b; background: rgba(255,255,255,0.8); padding: 10px 15px; border-radius: 12px; border: 2px solid #e2e8f0;">
+            <span id="quiz-progress">Question 1 / 10</span>
+            <span id="quiz-score-display" style="color: #8b5cf6;">Score: 0</span>
+        </div>
+
+        <div id="quiz-game-container" class="quiz-card" style="display:none;">
+            <div class="quiz-prompt">What is the correct form for<br><span id="quiz-prompt-text">Prompt</span>?</div>
+            <div class="options-list" id="quiz-options"></div>
+            <button class="btn quiz-action" id="quiz-next-btn" style="margin-top:20px; display:none; width: 100%;" onclick="initQuizQuestion()">Next Verb →</button>
+        </div>
+
+        <div id="quiz-summary-container" class="quiz-card" style="display:none;">
+            <h2 style="color: #7c3aed; margin-top: 0;">Quiz Complete! 🎉</h2>
+            <p id="quiz-final-score" style="font-size:1.2em; font-weight:900; color: #1e293b; margin-bottom: 20px;"></p>
+            <div id="quiz-mistakes-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+            <div class="action-row" style="margin-top:25px;">
+                <button class="btn secondary" onclick="showQuizSetup()">New Quiz 🔄</button>
+                <button id="quiz-retake-btn" class="btn quiz-action" style="display:none;" onclick="startMistakesQuiz()">Retake Missed 📝</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPEED TAB -->
+    <div id="speed" class="section">
+        <div id="speed-start-panel" class="start-screen">
+            <h2>⏱️ Speed Round</h2>
+            <p style="color:#94a3b8; margin-bottom:30px; font-weight: 700;">Race the clock! Choose the correct form in 30 seconds.</p>
+            <button class="btn" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; width: 100%; border: 2px solid #c2410c;" onclick="startSpeedRound()">Start Speed Run 🚀</button>
+        </div>
+        <div id="speed-game-panel" class="quiz-card" style="display:none;">
+            <div class="speed-header">
+                <div>Score: <span id="speed-score">0</span></div>
+                <div class="timer-badge">⏱️ <span id="speed-timer">30</span>s</div>
+            </div>
+            <div class="quiz-prompt" style="font-size:1.2em;">Conjugate:<br><span id="speed-prompt-text">Prompt</span></div>
+            <div class="options-list" id="speed-options"></div>
+        </div>
+    </div>
+
+    <!-- MISSED TAB -->
+    <div id="missed" class="section">
+        <div id="missed-deck-container">
+            <p style="font-size:0.9em; color:#e11d48; text-align:center; margin-bottom:15px; font-weight: 800;">Reviewing verbs you recently marked as missed.</p>
+            <div class="flashcard-wrapper" onclick="flipMissedCard()">
+                <div class="flashcard" id="missed-anim-target">
+                    <div class="card-face card-front missed-front">
+                        <div class="card-tags"><span class="tag" id="m-tag-type">type</span></div>
+                        <div class="card-main-text" id="m-front-text">Prompt</div>
+                        <div class="card-meaning-text" id="m-meaning-text">Meaning</div>
+                        <div class="card-footer-text">tap to reveal forms</div>
+                    </div>
+                    <div class="card-face card-back missed-back">
+                        <div class="card-tags"><span class="tag" id="m-tag-type-b">type</span></div>
+                        <div style="font-size:1.3em; font-weight:900; color:#c2410c;" id="m-back-title">Verb</div>
+                        <div style="font-size:0.9em; color:var(--text-muted); font-weight:700; margin-bottom:10px;" id="m-back-meaning">meaning</div>
+                        
+                        <div class="conjugation-grid" id="m-conjugation-grid"></div>
+                        <div class="past-row" id="m-past-row"></div>
+                        
+                        <div class="card-footer-text">Tap to turn back</div>
+                    </div>
+                </div>
+            </div>
+            <div class="action-row">
+                <button class="btn secondary" onclick="nextMissedCard()">Keep in List</button>
+                <button class="btn success" onclick="clearFromMissed()">Mastered & Clear ✨</button>
+            </div>
+        </div>
+        <div id="missed-empty-state" class="empty-message">
+            🎉 Amazing! Your missed verbs tray is completely clear!
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Comprehensive A1 single-flashcard structural verb database
+    const verbDatabase = [
+        // --- Regular Verbs ---
+        { inf: "abholen", meaning: "to pick up / fetch", type: "regular", forms: { ich: "hole ab", du: "holst ab", er: "holt ab", wir: "holen ab", ihr: "holt ab", sie: "holen ab" }, past: { praet: "holte ab", part: "hat abgeholt" } },
+        { inf: "anklicken", meaning: "to click on", type: "regular", forms: { ich: "klicke an", du: "klickst an", er: "klickt an", wir: "klicken an", ihr: "klickt an", sie: "klicken an" }, past: { praet: "klickte an", part: "hat angeklickt" } },
+        { inf: "ankreuzen", meaning: "to check / mark with a cross", type: "regular", forms: { ich: "kreuze an", du: "kreuzt an", er: "kreuzt an", wir: "kreuzen an", ihr: "kreuzt an", sie: "kreuzen an" }, past: { praet: "kreuzte an", part: "hat angekreuzt" } },
+        { inf: "anmachen", meaning: "to turn on / switch on", type: "regular", forms: { ich: "mache an", du: "machst an", er: "macht an", wir: "machen an", ihr: "macht an", sie: "machen an" }, past: { praet: "machte an", part: "hat angemacht" } },
+        { inf: "anmelden (sich)", meaning: "to register / sign up", type: "regular", forms: { ich: "melde an", du: "meldest an", er: "meldet an", wir: "melden an", ihr: "meldet an", sie: "melden an" }, past: { praet: "meldete an", part: "hat angemeldet" } },
+        { inf: "antworten", meaning: "to answer", type: "regular", forms: { ich: "antworte", du: "antwortest", er: "antwortet", wir: "antworten", ihr: "antwortet", sie: "antworten" }, past: { praet: "antwortete", part: "hat geantwortet" } },
+        { inf: "arbeiten", meaning: "to work", type: "regular", forms: { ich: "arbeite", du: "arbeitest", er: "arbeitet", wir: "arbeiten", ihr: "arbeitet", sie: "arbeiten" }, past: { praet: "arbeitete", part: "hat gearbeitet" } },
+        { inf: "aufhören", meaning: "to stop / cease", type: "regular", forms: { ich: "höre auf", du: "hörst auf", er: "hört auf", wir: "hören auf", ihr: "hört auf", sie: "hören auf" }, past: { praet: "hörte auf", part: "hat aufgehört" } },
+        { inf: "ausfüllen", meaning: "to fill out (a form)", type: "regular", forms: { ich: "fülle aus", du: "füllst aus", er: "füllt aus", wir: "füllen aus", ihr: "füllt aus", sie: "füllen aus" }, past: { praet: "füllte aus", part: "hat ausgefüllt" } },
+        { inf: "ausmachen", meaning: "to turn off / switch off", type: "regular", forms: { ich: "mache aus", du: "machst aus", er: "macht aus", wir: "machen aus", ihr: "macht aus", sie: "machen aus" }, past: { praet: "machte aus", part: "hat ausgemacht" } },
+        { inf: "baden", meaning: "to bathe / swim", type: "regular", forms: { ich: "bade", du: "badest", er: "badet", wir: "baden", ihr: "badet", sie: "baden" }, past: { praet: "badete", part: "hat gebadet" } },
+        { inf: "bedeuten", meaning: "to mean / signify", type: "regular", forms: { ich: "bedeute", du: "bedeutest", er: "bedeutet", wir: "bedeuten", ihr: "bedeutet", sie: "bedeuten" }, past: { praet: "bedeutete", part: "hat bedeutet" } },
+        { inf: "benutzen", meaning: "to use", type: "regular", forms: { ich: "benutze", du: "benutzt", er: "benutzt", wir: "benutzen", ihr: "benutzt", sie: "benutzen" }, past: { praet: "benutzte", part: "hat benutzt" } },
+        { inf: "besichtigen", meaning: "to visit / sightsee", type: "regular", forms: { ich: "besichtige", du: "besichtigst", er: "besichtigt", wir: "besichtigten", ihr: "besichtigt", sie: "besichtigen" }, past: { praet: "besichtigte", part: "hat besichtigt" } },
+        { inf: "bestellen", meaning: "to order", type: "regular", forms: { ich: "bestelle", du: "bestellst", er: "bestellt", wir: "bestellen", ihr: "bestellt", sie: "bestellen" }, past: { praet: "bestellte", part: "hat bestellt" } },
+        { inf: "besuchen", meaning: "to visit", type: "regular", forms: { ich: "besuche", du: "besuchst", er: "besucht", wir: "besuchen", ihr: "besucht", sie: "besuchen" }, past: { praet: "besuchte", part: "hat besucht" } },
+        { inf: "bezahlen", meaning: "to pay", type: "regular", forms: { ich: "bezahle", du: "bezahlst", er: "bezahlt", wir: "bezahlen", ihr: "bezahlt", sie: "bezahlen" }, past: { praet: "bezahlte", part: "hat bezahlt" } },
+        { inf: "brauchen", meaning: "to need", type: "regular", forms: { ich: "brauche", du: "brauchst", er: "braucht", wir: "brauchen", ihr: "braucht", sie: "brauchen" }, past: { praet: "brauchte", part: "hat gebraucht" } },
+        { inf: "buchstabieren", meaning: "to spell", type: "regular", forms: { ich: "buchstabiere", du: "buchstabierst", er: "buchstabiert", wir: "buchstabieren", ihr: "buchstabiert", sie: "buchstabieren" }, past: { praet: "buchstabierte", part: "hat buchstabiert" } },
+        { inf: "danken", meaning: "to thank", type: "regular", forms: { ich: "danke", du: "dankst", er: "dankt", wir: "danken", ihr: "dankt", sie: "danken" }, past: { praet: "dankte", part: "hat gedankt" } },
+        { inf: "dauern", meaning: "to last / take time", type: "regular", forms: { ich: "dauere", du: "dauerst", er: "dauert", wir: "dauern", ihr: "dauert", sie: "dauern" }, past: { praet: "dauerte", part: "hat gedauert" } },
+        { inf: "drucken", meaning: "to print", type: "regular", forms: { ich: "drucke", du: "druckst", er: "druckt", wir: "drucken", ihr: "druckt", sie: "drucken" }, past: { praet: "druckte", part: "hat gedruckt" } },
+        { inf: "drücken", meaning: "to press / push", type: "regular", forms: { ich: "drücke", du: "drückst", er: "drückt", wir: "drücken", ihr: "drückt", sie: "drücken" }, past: { praet: "drückte", part: "hat gedrückt" } },
+        { inf: "duschen (sich)", meaning: "to shower", type: "regular", forms: { ich: "dusche", du: "duschst", er: "duscht", wir: "duschen", ihr: "duscht", sie: "duschen" }, past: { praet: "duschte", part: "hat geduscht" } },
+        { inf: "einkaufen", meaning: "to shop", type: "regular", forms: { ich: "kaufe ein", du: "kaufst ein", er: "kauft ein", wir: "kaufen ein", ihr: "kauft ein", sie: "kaufen ein" }, past: { praet: "kaufte ein", part: "hat eingekauft" } },
+        { inf: "enden", meaning: "to end / finish", type: "regular", forms: { ich: "ende", du: "endest", er: "endet", wir: "enden", ihr: "endet", sie: "enden" }, past: { praet: "endete", part: "hat geendet" } },
+        { inf: "entschuldigen (sich)", meaning: "to excuse / apologize", type: "regular", forms: { ich: "entschuldige", du: "entschuldigst", er: "entschuldigt", wir: "entschuldigen", ihr: "entschuldigt", sie: "entschuldigen" }, past: { praet: "entschuldigte", part: "hat entschuldigt" } },
+        { inf: "erklären", meaning: "to explain", type: "regular", forms: { ich: "erkläre", du: "erklärst", er: "erklärt", wir: "erklären", ihr: "erklärt", sie: "erklären" }, past: { praet: "erklärte", part: "hat erklärt" } },
+        { inf: "erlauben", meaning: "to allow / permit", type: "regular", forms: { ich: "erlaube", du: "erlaubst", er: "erlaubt", wir: "erlauben", ihr: "erlaubt", sie: "erlauben" }, past: { praet: "erlaube", part: "hat erlaubt" } },
+        { inf: "erzählen", meaning: "to tell / narrate", type: "regular", forms: { ich: "erzähle", du: "erzählst", er: "erzählt", wir: "erzählen", ihr: "erzählt", sie: "erzählen" }, past: { praet: "erzählte", part: "hat erzählt" } },
+        { inf: "feiern", meaning: "to celebrate", type: "regular", forms: { ich: "feiere", du: "feierst", er: "feiert", wir: "feiern", ihr: "feiert", sie: "feiern" }, past: { praet: "feierte", part: "hat gefeiert" } },
+        { inf: "fehlen", meaning: "to be missing / absent", type: "regular", forms: { ich: "fehle", du: "fehlst", er: "fehlt", wir: "fehlen", ihr: "fehlt", sie: "fehlen" }, past: { praet: "fehlte", part: "hat gefehlt" } },
+        { inf: "fragen", meaning: "to ask", type: "regular", forms: { ich: "frage", du: "fragst", er: "fragt", wir: "fragen", ihr: "fragt", sie: "fragen" }, past: { praet: "fragte", part: "hat gefragt" } },
+        { inf: "freuen (sich)", meaning: "to look forward to / be happy", type: "regular", forms: { ich: "freue", du: "freust", er: "freut", wir: "freuen", ihr: "freut", sie: "freuen" }, past: { praet: "freute", part: "hat gefreut" } },
+        { inf: "frühstücken", meaning: "to eat breakfast", type: "regular", forms: { ich: "frühstücke", du: "frühstückst", er: "frühstückt", wir: "frühstücken", ihr: "frühstückt", sie: "frühstücken" }, past: { praet: "frühstückte", part: "hat gefrühstückt" } },
+        { inf: "gehören", meaning: "to belong to", type: "regular", forms: { ich: "gehöre", du: "gehörst", er: "gehört", wir: "gehören", ihr: "gehört", sie: "gehören" }, past: { praet: "gehörte", part: "hat gehört" } },
+        { inf: "glauben", meaning: "to believe / think", type: "regular", forms: { ich: "glaube", du: "glaubst", er: "glaubt", wir: "glauben", ihr: "glaubt", sie: "glauben" }, past: { praet: "glaubte", part: "hat geglaubt" } },
+        { inf: "gratulieren", meaning: "to congratulate", type: "regular", forms: { ich: "gratuliere", du: "gratulierst", er: "gratuliert", wir: "gratulieren", ihr: "gratuliert", sie: "gratulieren" }, past: { praet: "gratulierte", part: "hat gratuliert" } },
+        { inf: "grillen", meaning: "to grill / barbecue", type: "regular", forms: { ich: "grille", du: "grillst", er: "grillt", wir: "grillen", ihr: "grillt", sie: "grillen" }, past: { praet: "grillte", part: "hat gegrillt" } },
+        { inf: "heiraten", meaning: "to marry", type: "regular", forms: { ich: "heirate", du: "heiratest", er: "heiratet", wir: "heiraten", ihr: "heiratet", sie: "heiraten" }, past: { praet: "heiratete", part: "hat geheiratet" } },
+        { inf: "holen", meaning: "to fetch / get", type: "regular", forms: { ich: "hole", du: "holst", er: "holt", wir: "holen", ihr: "holt", sie: "holen" }, past: { praet: "holte", part: "hat geholt" } },
+        { inf: "hören", meaning: "to hear / listen", type: "regular", forms: { ich: "höre", du: "hörst", er: "hört", wir: "hören", ihr: "hört", sie: "hören" }, past: { praet: "hörte", part: "hat gehört" } },
+        { inf: "kaufen", meaning: "to buy", type: "regular", forms: { ich: "kaufe", du: "kaufst", er: "kauft", wir: "kaufen", ihr: "kauft", sie: "kaufen" }, past: { praet: "kaufte", part: "hat gekauft" } },
+        { inf: "kennenlernen", meaning: "to get to know", type: "regular", forms: { ich: "lerne kennen", du: "lernst kennen", er: "lernt kennen", wir: "lernen kennen", ihr: "lernt kennen", sie: "lernen kennen" }, past: { praet: "lernte kennen", part: "hat kennengelernt" } },
+        { inf: "kochen", meaning: "to cook", type: "regular", forms: { ich: "koche", du: "kochst", er: "kocht", wir: "kochen", ihr: "kocht", sie: "kochen" }, past: { praet: "kochte", part: "hat gekocht" } },
+        { inf: "kosten", meaning: "to cost", type: "regular", forms: { ich: "koste", du: "kostest", er: "kostet", wir: "kosten", ihr: "kostet", sie: "kosten" }, past: { praet: "kostete", part: "hat gekostet" } },
+        { inf: "kriegen", meaning: "to get / obtain", type: "regular", forms: { ich: "kriege", du: "kriegst", er: "kriegt", wir: "kriegen", ihr: "kriegt", sie: "kriegen" }, past: { praet: "kriegte", part: "hat gekriegt" } },
+        { inf: "kümmern (sich)", meaning: "to look after / care for", type: "regular", forms: { ich: "kümmere", du: "kümmerst", er: "kümmert", wir: "kümmern", ihr: "kümmert", sie: "kümmern" }, past: { praet: "kümmerte", part: "hat gekümmert" } },
+        { inf: "lachen", meaning: "to laugh", type: "regular", forms: { ich: "lache", du: "lachst", er: "lacht", wir: "lachen", ihr: "lacht", sie: "lachen" }, past: { praet: "lachte", part: "hat gelacht" } },
+        { inf: "leben", meaning: "to live", type: "regular", forms: { ich: "lebe", du: "lebst", er: "lebt", wir: "leben", ihr: "lebt", sie: "leben" }, past: { praet: "lebte", part: "hat gelebt" } },
+        { inf: "legen", meaning: "to lay / place horizontally", type: "regular", forms: { ich: "lege", du: "legst", er: "legt", wir: "legen", ihr: "legt", sie: "legen" }, past: { praet: "legte", part: "hat gelegt" } },
+        { inf: "lernen", meaning: "to learn / study", type: "regular", forms: { ich: "lerne", du: "lernst", er: "lernt", wir: "lernen", ihr: "lernt", sie: "lernen" }, past: { praet: "lernte", part: "hat gelernt" } },
+        { inf: "lieben", meaning: "to love", type: "regular", forms: { ich: "liebe", du: "liebst", er: "liebt", wir: "lieben", ihr: "liebt", sie: "lieben" }, past: { praet: "liebte", part: "hat geliebt" } },
+        { inf: "machen", meaning: "to do / make", type: "regular", forms: { ich: "mache", du: "machst", er: "macht", wir: "machen", ihr: "macht", sie: "machen" }, past: { praet: "machte", part: "hat gemacht" } },
+        { inf: "mieten", meaning: "to rent", type: "regular", forms: { ich: "miete", du: "mietest", er: "mietet", wir: "mieten", ihr: "mietet", sie: "mieten" }, past: { praet: "mietete", part: "hat gemietet" } },
+        { inf: "mitmachen", meaning: "to join in / participate", type: "regular", forms: { ich: "mache mit", du: "machst mit", er: "macht mit", wir: "machen mit", ihr: "macht mit", sie: "machen mit" }, past: { praet: "machte mit", part: "hat mitgemacht" } },
+        { inf: "öffnen", meaning: "to open", type: "regular", forms: { ich: "öffne", du: "öffnest", er: "öffnet", wir: "öffnen", ihr: "öffnet", sie: "öffnen" }, past: { praet: "öffnete", part: "hat geöffnet" } },
+        { inf: "rauchen", meaning: "to smoke", type: "regular", forms: { ich: "rauche", du: "rauchst", er: "raucht", wir: "rauchen", ihr: "raucht", sie: "rauchen" }, past: { praet: "rauchte", part: "hat geraucht" } },
+        { inf: "regnen", meaning: "to rain", type: "regular", forms: { ich: "regne", du: "regnest", er: "regnet", wir: "regnen", ihr: "regnet", sie: "regnen" }, past: { praet: "regnete", part: "hat geregnet" } },
+        { inf: "reisen", meaning: "to travel", type: "regular", forms: { ich: "reise", du: "reist", er: "reist", wir: "reisen", ihr: "reist", sie: "reisen" }, past: { praet: "reiste", part: "ist gereist" } },
+        { inf: "reparieren", meaning: "to repair", type: "regular", forms: { ich: "repariere", du: "reparierst", er: "repariert", wir: "reparieren", ihr: "repariert", sie: "repariere" }, past: { praet: "reparierte", part: "hat repariert" } },
+        { inf: "sagen", meaning: "to say / tell", type: "regular", forms: { ich: "sage", du: "sagst", er: "sagt", wir: "sagen", ihr: "sagt", sie: "sagen" }, past: { praet: "sagte", part: "hat gesagt" } },
+        { inf: "schicken", meaning: "to send", type: "regular", forms: { ich: "schicke", du: "schickst", er: "schickt", wir: "schicken", ihr: "schickt", sie: "schicken" }, past: { praet: "schickte", part: "hat geschickt" } },
+        { inf: "schmecken", meaning: "to taste", type: "regular", forms: { ich: "schmecke", du: "schmeckst", er: "schmeckt", wir: "schmecken", ihr: "schmeckt", sie: "schmecken" }, past: { praet: "schmeckte", part: "hat geschmeckt" } },
+        { inf: "spielen", meaning: "to play", type: "regular", forms: { ich: "spiele", du: "spielst", er: "spielt", wir: "spielen", ihr: "spielt", sie: "spielen" }, past: { praet: "spielte", part: "hat gespielt" } },
+        { inf: "stellen", meaning: "to place upright / put", type: "regular", forms: { ich: "stelle", du: "stellst", er: "stellt", wir: "stellen", ihr: "stellt", sie: "stellen" }, past: { praet: "stellte", part: "hat gestellt" } },
+        { inf: "studieren", meaning: "to study (at university)", type: "regular", forms: { ich: "studiere", du: "studierst", er: "studiert", wir: "studieren", ihr: "studiert", sie: "studieren" }, past: { praet: "studierte", part: "hat studiert" } },
+        { inf: "suchen", meaning: "to search / look for", type: "regular", forms: { ich: "suche", du: "suchst", er: "sucht", wir: "suchen", ihr: "sucht", sie: "suchen" }, past: { praet: "suchte", part: "hat gesucht" } },
+        { inf: "tanzen", meaning: "to dance", type: "regular", forms: { ich: "tanze", du: "tanzt", er: "tanzt", wir: "tanzen", ihr: "tanzt", sie: "tanzen" }, past: { praet: "tanzte", part: "hat getanzt" } },
+        { inf: "telefonieren", meaning: "to talk on the phone", type: "regular", forms: { ich: "telefoniere", du: "telefonierst", er: "telefoniert", wir: "telefonieren", ihr: "telefoniert", sie: "telefonieren" }, past: { praet: "telefonierte", part: "hat telefoniert" } },
+        { inf: "übernachten", meaning: "to stay overnight", type: "regular", forms: { ich: "übernachte", du: "übernachtest", er: "übernachtet", wir: "übernachten", ihr: "übernachtet", sie: "übernachten" }, past: { praet: "übernachtete", part: "hat übernachtet" } },
+        { inf: "verdienen", meaning: "to earn / deserve", type: "regular", forms: { ich: "verdiene", du: "verdienst", er: "verdient", wir: "verdienen", ihr: "verdient", sie: "verdienen" }, past: { praet: "verdiente", part: "hat verdient" } },
+        { inf: "verkaufen", meaning: "to sell", type: "regular", forms: { ich: "verkaufe", du: "verkaufst", er: "verkauft", wir: "verkaufen", ihr: "verkauft", sie: "verkaufen" }, past: { praet: "verkaufte", part: "hat verkauft" } },
+        { inf: "vermieten", meaning: "to rent out", type: "regular", forms: { ich: "vermiete", du: "vermietest", er: "vermietet", wir: "vermieten", ihr: "vermietet", sie: "vermieten" }, past: { praet: "vermietete", part: "hat vermietet" } },
+        { inf: "vorstellen (sich)", meaning: "to introduce oneself / imagine", type: "regular", forms: { ich: "stelle vor", du: "stellst vor", er: "stellt vor", wir: "stellen vor", ihr: "stellt vor", sie: "stellen vor" }, past: { praet: "stellte vor", part: "hat vorgestellt" } },
+        { inf: "wandern", meaning: "to hike / wander", type: "regular", forms: { ich: "wandere", du: "wanderst", er: "wandert", wir: "wandern", ihr: "wandert", sie: "wandern" }, past: { praet: "wanderte", part: "ist gewandert" } },
+        { inf: "warten", meaning: "to wait", type: "regular", forms: { ich: "warte", du: "wartest", er: "wartet", wir: "warten", ihr: "wartet", sie: "warten" }, past: { praet: "wartete", part: "hat gewartet" } },
+        { inf: "wiederholen", meaning: "to repeat", type: "regular", forms: { ich: "wiederhole", du: "wiederholst", er: "wiederholt", wir: "wiederholen", ihr: "wiederholt", sie: "wiederholen" }, past: { praet: "wiederholte", part: "hat wiederholt" } },
+        { inf: "wohnen", meaning: "to reside / live", type: "regular", forms: { ich: "wohne", du: "wohnst", er: "wohnt", wir: "wohnen", ihr: "wohnt", sie: "wohnen" }, past: { praet: "wohnte", part: "hat gewohnt" } },
+        { inf: "zahlen", meaning: "to pay", type: "regular", forms: { ich: "zahle", du: "zahlst", er: "zahlt", wir: "zahlen", ihr: "zahlt", sie: "zahlen" }, past: { praet: "zahlte", part: "hat gezahlt" } },
+
+        // --- Irregular & Mixed Verbs ---
+        { inf: "abfahren", meaning: "to depart / leave", type: "irregular", forms: { ich: "fahre ab", du: "fährst ab", er: "fährt ab", wir: "fahren ab", ihr: "fahrt ab", sie: "fahren ab" }, past: { praet: "fuhr ab", part: "ist abgefahren" } },
+        { inf: "abgeben", meaning: "to hand in / deliver", type: "irregular", forms: { ich: "gebe ab", du: "gibst ab", er: "gibt ab", wir: "geben ab", ihr: "gebt ab", sie: "geben ab" }, past: { praet: "gab ab", part: "hat abgegeben" } },
+        { inf: "anbieten", meaning: "to offer", type: "irregular", forms: { ich: "biete an", du: "bietest an", er: "bietet an", wir: "bieten an", ihr: "bietet an", sie: "bieten an" }, past: { praet: "bot an", part: "hat angeboten" } },
+        { inf: "anfangen", meaning: "to begin / start", type: "irregular", forms: { ich: "fange an", du: "fängst an", er: "fängt an", wir: "fangen an", ihr: "fangt an", sie: "fangen an" }, past: { praet: "fing an", part: "hat angefangen" } },
+        { inf: "ankommen", meaning: "to arrive", type: "irregular", forms: { ich: "komme an", du: "kommst an", er: "kommt an", wir: "kommen an", ihr: "kommt an", sie: "kommen an" }, past: { praet: "kam an", part: "ist angekommen" } },
+        { inf: "anrufen", meaning: "to call on the phone", type: "irregular", forms: { ich: "rufe an", du: "rufst an", er: "ruft an", wir: "rufen an", ihr: "ruft an", sie: "rufen an" }, past: { praet: "rief an", part: "hat angerufen" } },
+        { inf: "anziehen (sich)", meaning: "to dress oneself", type: "irregular", forms: { ich: "ziehe an", du: "ziehst an", er: "zieht an", wir: "ziehen an", ihr: "zieht an", sie: "ziehen an" }, past: { praet: "zog an", part: "hat angezogen" } },
+        { inf: "aufstehen", meaning: "to stand up / get up", type: "irregular", forms: { ich: "stehe auf", du: "stehst auf", er: "steht auf", wir: "stehen auf", ihr: "steht auf", sie: "stehen auf" }, past: { praet: "stand auf", part: "ist aufgestanden" } },
+        { inf: "aussehen", meaning: "to look like / appear", type: "irregular", forms: { ich: "sehe aus", du: "siehst aus", er: "sieht aus", wir: "sehen aus", ihr: "seht aus", sie: "sehen aus" }, past: { praet: "sah aus", part: "hat ausgesehen" } },
+        { inf: "aussteigen", meaning: "to get off / disembark", type: "irregular", forms: { ich: "steige aus", du: "steigst aus", er: "steigt aus", wir: "steigen aus", ihr: "steigt aus", sie: "steigen aus" }, past: { praet: "stieg aus", part: "ist ausgestiegen" } },
+        { inf: "ausziehen (sich)", meaning: "to undress oneself / move out", type: "irregular", forms: { ich: "ziehe aus", du: "ziehst aus", er: "zieht aus", wir: "ziehen aus", ihr: "zieht aus", sie: "ziehen aus" }, past: { praet: "zog aus", part: "hat ausgezogen" } },
+        { inf: "beginnen", meaning: "to begin / start", type: "irregular", forms: { ich: "beginne", du: "beginnst", er: "beginnt", wir: "beginnen", ihr: "beginnt", sie: "beginnen" }, past: { praet: "begann", part: "hat begonnen" } },
+        { inf: "bekommen", meaning: "to receive / get", type: "irregular", forms: { ich: "bekomme", du: "bekommst", er: "bekommt", wir: "bekommen", ihr: "bekommt", sie: "bekommen" }, past: { praet: "bekam", part: "hat bekommen" } },
+        { inf: "bitten", meaning: "to ask / request", type: "irregular", forms: { ich: "bitte", du: "bittest", er: "bittet", wir: "bitten", ihr: "bittet", sie: "bitten" }, past: { praet: "bat", part: "hat gebeten" } },
+        { inf: "bleiben", meaning: "to stay / remain", type: "irregular", forms: { ich: "bleibe", du: "bleibst", er: "bleibt", wir: "bleiben", ihr: "bleibt", sie: "bleiben" }, past: { praet: "blieb", part: "ist geblieben" } },
+        { inf: "bringen", meaning: "to bring", type: "irregular", forms: { ich: "bringe", du: "bringst", er: "bringt", wir: "bringen", ihr: "bringt", sie: "bringen" }, past: { praet: "brachte", part: "hat gebracht" } },
+        { inf: "dürfen", meaning: "to be allowed to / may", type: "irregular", forms: { ich: "darf", du: "darfst", er: "darf", wir: "dürfen", ihr: "dürft", sie: "dürfen" }, past: { praet: "durfte", part: "hat gedurft" } },
+        { inf: "einladen", meaning: "to invite", type: "irregular", forms: { ich: "lade ein", du: "lädst ein", er: "lädt ein", wir: "laden ein", ihr: "ladet ein", sie: "laden ein" }, past: { praet: "lud ein", part: "hat eingeladen" } },
+        { inf: "einsteigen", meaning: "to board / get in", type: "irregular", forms: { ich: "steige ein", du: "steigst ein", er: "steigt ein", wir: "steigen ein", ihr: "steigt ein", sie: "steigen ein" }, past: { praet: "stieg ein", part: "ist eingestiegen" } },
+        { inf: "empfehlen", meaning: "to recommend", type: "irregular", forms: { ich: "empfehle", du: "empfiehlst", er: "empfiehlt", wir: "empfehlen", ihr: "empfehlt", sie: "empfehlen" }, past: { praet: "empfah", part: "hat empfohlen" } },
+        { inf: "essen", meaning: "to eat", type: "irregular", forms: { ich: "esse", du: "isst", er: "isst", wir: "essen", ihr: "esst", sie: "essen" }, past: { praet: "aß", part: "hat gegessen" } },
+        { inf: "fahren", meaning: "to drive / travel", type: "irregular", forms: { ich: "fahre", du: "fährst", er: "fährt", wir: "fahren", ihr: "fahrt", sie: "fahren" }, past: { praet: "fuhr", part: "ist gefahren" } },
+        { inf: "fernsehen", meaning: "to watch TV", type: "irregular", forms: { ich: "sehe fern", du: "siehst fern", er: "sieht fern", wir: "sehen fern", ihr: "seht fern", sie: "sehen fern" }, past: { praet: "sah fern", part: "hat ferngesehen" } },
+        { inf: "finden", meaning: "to find", type: "irregular", forms: { ich: "finde", du: "findest", er: "findet", wir: "finden", ihr: "findet", sie: "finden" }, past: { praet: "fand", part: "hat gefunden" } },
+        { inf: "fliegen", meaning: "to fly", type: "irregular", forms: { ich: "fliege", du: "fliegst", er: "fliegt", wir: "fliegen", ihr: "fliegt", sie: "fliegen" }, past: { praet: "flog", part: "ist geflogen" } },
+        { inf: "geben", meaning: "to give", type: "irregular", forms: { ich: "gebe", du: "gibst", er: "gibt", wir: "geben", ihr: "gebt", sie: "geben" }, past: { praet: "gab", part: "hat gegeben" } },
+        { inf: "gefallen", meaning: "to please / like", type: "irregular", forms: { ich: "gefalle", du: "gefällst", er: "gefällt", wir: "gefallen", ihr: "gefallt", sie: "gefallen" }, past: { praet: "gefiel", part: "hat gefallen" } },
+        { inf: "gehen", meaning: "to go / walk", type: "irregular", forms: { ich: "gehe", du: "gehst", er: "geht", wir: "gehen", ihr: "geht", sie: "gehen" }, past: { praet: "ging", part: "ist gegangen" } },
+        { inf: "gewinnen", meaning: "to win", type: "irregular", forms: { ich: "gewinnen", du: "gewinnst", er: "gewinnt", wir: "gewinnen", ihr: "gewinnt", sie: "gewinnen" }, past: { praet: "gewann", part: "hat gewonnen" } },
+        { inf: "haben", meaning: "to have", type: "irregular", forms: { ich: "habe", du: "hast", er: "hat", wir: "haben", ihr: "habt", sie: "haben" }, past: { praet: "hatte", part: "hat gehabt" } },
+        { inf: "halten", meaning: "to hold / stop", type: "irregular", forms: { ich: "halte", du: "hältst", er: "hält", wir: "halten", ihr: "haltet", sie: "halten" }, past: { praet: "hielt", part: "hat gehalten" } },
+        { inf: "heißen", meaning: "to be called / named", type: "irregular", forms: { ich: "heiße", du: "heißt", er: "heißt", wir: "heißen", ihr: "heißt", sie: "heißen" }, past: { praet: "hieß", part: "hat geheißen" } },
+        { inf: "helfen", meaning: "to help", type: "irregular", forms: { ich: "helfe", du: "hilfst", er: "hilft", wir: "helfen", ihr: "helft", sie: "helfen" }, past: { praet: "half", part: "hat geholfen" } },
+        { inf: "kennen", meaning: "to know (people/places)", type: "irregular", forms: { ich: "kenne", du: "kennst", er: "kennt", wir: "kennen", ihr: "kennt", sie: "kennen" }, past: { praet: "kannte", part: "hat gekannt" } },
+        { inf: "kommen", meaning: "to come", type: "irregular", forms: { ich: "komme", du: "kommst", er: "kommt", wir: "kommen", ihr: "kommt", sie: "kommen" }, past: { praet: "kam", part: "ist gekommen" } },
+        { inf: "können", meaning: "to be able to / can", type: "irregular", forms: { ich: "kann", du: "kannst", er: "kann", wir: "können", ihr: "könnt", sie: "können" }, past: { praet: "konnte", part: "hat gekonnt" } },
+        { inf: "laufen", meaning: "to run / walk", type: "irregular", forms: { ich: "laufe", du: "läufst", er: "läuft", wir: "laufen", ihr: "lauft", sie: "laufen" }, past: { praet: "lief", part: "ist gelaufen" } },
+        { inf: "lesen", meaning: "to read", type: "irregular", forms: { ich: "lese", du: "liest", er: "liest", wir: "lesen", ihr: "lest", sie: "lesen" }, past: { praet: "las", part: "hat gelesen" } },
+        { inf: "liegen", meaning: "to lie / recline flat", type: "irregular", forms: { ich: "liege", du: "liegst", er: "liegt", wir: "liegen", ihr: "liegt", sie: "liegen" }, past: { praet: "lag", part: "hat gelegen" } },
+        { inf: "mitbringen", meaning: "to bring along", type: "irregular", forms: { ich: "bringe mit", du: "bringst mit", er: "bringt mit", wir: "bringen mit", ihr: "bringt mit", sie: "bringen mit" }, past: { praet: "brachte mit", part: "hat mitgebracht" } },
+        { inf: "mitkommen", meaning: "to come along", type: "irregular", forms: { ich: "komme mit", du: "kommst mit", er: "kommt mit", wir: "kommen mit", ihr: "kommt mit", sie: "kommen mit" }, past: { praet: "kam mit", part: "ist mitgekommen" } },
+        { inf: "mitnehmen", meaning: "to take along", type: "irregular", forms: { ich: "nehme mit", du: "nimmst mit", er: "nimmt mit", wir: "nehmen mit", ihr: "nehmt mit", sie: "nehmen mit" }, past: { praet: "nahm mit", part: "hat mitgenommen" } },
+        { inf: "möchten", meaning: "would like", type: "irregular", forms: { ich: "möchte", du: "möchtest", er: "möchte", wir: "möchten", ihr: "möchtet", sie: "möchten" }, past: { praet: "wollte", part: "hat gewollt" } },
+        { inf: "mögen", meaning: "to like", type: "irregular", forms: { ich: "mag", du: "magst", er: "mag", wir: "mögen", ihr: "mögt", sie: "mögen" }, past: { praet: "mochte", part: "hat gemocht" } },
+        { inf: "müssen", meaning: "to must / have to", type: "irregular", forms: { ich: "muss", du: "musst", er: "muss", wir: "müssen", ihr: "müsst", sie: "müssen" }, past: { praet: "musste", part: "hat gemusst" } },
+        { inf: "nehmen", meaning: "to take", type: "irregular", forms: { ich: "nehme", du: "nimmst", er: "nimmt", wir: "nehmen", ihr: "nehmt", sie: "nehmen" }, past: { praet: "nahm", part: "hat genommen" } },
+        { inf: "Rad fahren", meaning: "to ride a bicycle", type: "irregular", forms: { ich: "fahre Rad", du: "fährst Rad", er: "fährt Rad", wir: "fahren Rad", ihr: "fahrt Rad", sie: "fahren Rad" }, past: { praet: "fuhr Rad", part: "ist Rad gefahren" } },
+        { inf: "riechen", meaning: "to smell", type: "irregular", forms: { ich: "rieche", du: "riechst", er: "riecht", wir: "riechen", ihr: "riecht", sie: "riechen" }, past: { praet: "roch", part: "hat gerochen" } },
+        { inf: "scheinen", meaning: "to shine / seem", type: "irregular", forms: { ich: "scheine", du: "scheinst", er: "scheint", wir: "scheinen", ihr: "scheint", sie: "scheinen" }, past: { praet: "schien", part: "hat geschienen" } },
+        { inf: "schlafen", meaning: "to sleep", type: "irregular", forms: { ich: "schlafe", du: "schläfst", er: "schläft", wir: "schlafen", ihr: "schlaft", sie: "schlafen" }, past: { praet: "schlief", part: "hat geschlafen" } },
+        { inf: "schließen", meaning: "to close / lock", type: "irregular", forms: { ich: "schließe", du: "schließt", er: "schließt", wir: "schließen", ihr: "schließt", sie: "schließen" }, past: { praet: "schloss", part: "hat geschlossen" } },
+        { inf: "schreiben", meaning: "to write", type: "irregular", forms: { ich: "schreibe", du: "schreibst", er: "schreibt", wir: "schreiben", ihr: "schreibt", sie: "schreiben" }, past: { praet: "schrieb", part: "hat geschrieben" } },
+        { inf: "schwimmen", meaning: "to swim", type: "irregular", forms: { ich: "schwimme", du: "schwimmst", er: "schwimmt", wir: "schwimmen", ihr: "schwimmt", sie: "schwimmen" }, past: { praet: "schwamm", part: "ist geschwommen" } },
+        { inf: "sehen", meaning: "to see", type: "irregular", forms: { ich: "sehe", du: "siehst", er: "sieht", wir: "sehen", ihr: "seht", sie: "sehen" }, past: { praet: "sah", part: "hat gesehen" } },
+        { inf: "sein", meaning: "to be", type: "irregular", forms: { ich: "bin", du: "bist", er: "ist", wir: "sind", ihr: "seid", sie: "sind" }, past: { praet: "war", part: "ist gewesen" } },
+        { inf: "sitzen", meaning: "to sit / be seated", type: "irregular", forms: { ich: "sitze", du: "sitzt", er: "sitzt", wir: "sitzen", ihr: "sitzt", sie: "sitzen" }, past: { praet: "saß", part: "hat gesessen" } },
+        { inf: "sollen", meaning: "to should / ought to", type: "irregular", forms: { ich: "soll", du: "sollst", er: "soll", wir: "sollen", ihr: "sollt", sie: "sollen" }, past: { praet: "sollte", part: "hat gesollt" } },
+        { inf: "sprechen", meaning: "to speak / talk", type: "irregular", forms: { ich: "spreche", du: "sprichst", er: "spricht", wir: "sprechen", ihr: "sprecht", sie: "sprechen" }, past: { praet: "sprach", part: "hat gesprochen" } },
+        { inf: "stehen", meaning: "to stand", type: "irregular", forms: { ich: "stehe", du: "stehst", er: "steht", wir: "stehen", ihr: "steht", sie: "stehen" }, past: { praet: "stand", part: "hat gestanden" } },
+        { inf: "treffen (sich)", meaning: "to meet up", type: "irregular", forms: { ich: "treffe", du: "triffst", er: "trifft", wir: "treffen", ihr: "trefft", sie: "treffen" }, past: { praet: "traf", part: "hat getroffen" } },
+        { inf: "trinken", meaning: "to drink", type: "irregular", forms: { ich: "trinke", du: "trinkst", er: "trinkt", wir: "trinken", ihr: "trinkt", sie: "trinken" }, past: { praet: "trank", part: "hat getrunken" } },
+        { inf: "tun", meaning: "to do / act", type: "irregular", forms: { ich: "tue", du: "tust", er: "tut", wir: "tun", ihr: "tut", sie: "tun" }, past: { praet: "tat", part: "hat getan" } },
+        { inf: "überweisen", meaning: "to transfer (money)", type: "irregular", forms: { ich: "überweise", du: "überweist", er: "überweist", wir: "überweisen", ihr: "überweist", sie: "überweisen" }, past: { praet: "überwies", part: "hat überwiesen" } },
+        { inf: "umziehen", meaning: "to move houses / change clothes", type: "irregular", forms: { ich: "ziehe um", du: "ziehst um", er: "zieht um", wir: "ziehen um", ihr: "zieht um", sie: "ziehen um" }, past: { praet: "zog um", part: "ist umgezogen" } },
+        { inf: "unterschreiben", meaning: "to sign", type: "irregular", forms: { ich: "unterschreibe", du: "unterschreibst", er: "unterschreibt", wir: "unterschreiben", ihr: "unterschreibt", sie: "unterschreiben" }, past: { praet: "unterschrieb", part: "hat unterschrieben" } },
+        { inf: "verstehen", meaning: "to understand", type: "irregular", forms: { ich: "verstehe", du: "verstehst", er: "versteht", wir: "verstehen", ihr: "versteht", sie: "verstehen" }, past: { praet: "verstand", part: "hat verstanden" } },
+        { inf: "waschen (sich)", meaning: "to wash oneself", type: "irregular", forms: { ich: "wasche", du: "wäschst", er: "wäscht", wir: "waschen", ihr: "wascht", sie: "waschen" }, past: { praet: "wusch", part: "hat gewaschen" } },
+        { inf: "weh tun", meaning: "to hurt / cause pain", type: "irregular", forms: { ich: "tue weh", du: "tust weh", er: "tut weh", wir: "tun weh", ihr: "tut weh", sie: "tun weh" }, past: { praet: "tat weh", part: "hat wehgetan" } },
+        { inf: "werden", meaning: "to become", type: "irregular", forms: { ich: "werde", du: "wirst", er: "wird", wir: "werden", ihr: "werdet", sie: "werden" }, past: { praet: "wurde", part: "ist geworden" } },
+        { inf: "wissen", meaning: "to know (facts)", type: "irregular", forms: { ich: "weiß", du: "weißt", er: "weiß", wir: "wissen", ihr: "wisst", sie: "wissen" }, past: { praet: "wusste", part: "hat gewusst" } },
+        { inf: "wollen", meaning: "to want", type: "irregular", forms: { ich: "will", du: "willst", er: "will", wir: "wollen", ihr: "wollt", sie: "wollen" }, past: { praet: "wollte", part: "hat gewollt" } }
+    ];
+
+    const pronounsLabelMap = { ich: "ich", du: "du", er: "er/sie/es", wir: "wir", ihr: "ihr", sie: "sie/Sie" };
+
+    let currentTab = "flashcards";
+    let filterType = "all";
+    
+    let filteredPool = [];
+    let activeCardIndex = 0;
+    
+    let totalReviewedCount = 0;
+    let knewItCount = 0;
+    let missedArray = [];
+    let currentMissedIndex = 0;
+
+    let selectedQuizLength = 10;
+    let quizPool = [];
+    let quizSessionCount = 0;
+    let quizMaxQuestions = 10;
+    let quizCurrentScore = 0;
+    let quizMistakes = [];
+    let quizActiveItem = null;
+    let quizActiveSubject = "";
+
+    let speedTimerInterval = null;
+    let speedTimeLeft = 30;
+    let speedScoreValue = 0;
+    let speedCurrentWord = null;
+    let speedCurrentSubject = "";
+
+    window.onload = () => {
+        document.getElementById("total-pool-count").innerText = verbDatabase.length;
+        applyFilters();
+    };
+
+    function switchTab(tabId) {
+        currentTab = tabId;
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        
+        if (event && event.target) {
+            event.target.classList.add('active');
+        } else {
+            const btn = document.querySelector(`.tab-btn[onclick*="'${tabId}'"]`);
+            if (btn) btn.classList.add('active');
+        }
+        document.getElementById(tabId).classList.add('active');
+
+        const filterPanel = document.getElementById("filter-panel");
+        const statsPanel = document.getElementById("stats-grid");
+
+        clearInterval(speedTimerInterval);
+
+        if (tabId === "speed") {
+            filterPanel.style.display = "none";
+            statsPanel.style.display = "none";
+            resetSpeedRoundUI();
+        } else if (tabId === "missed") {
+            filterPanel.style.display = "none";
+            statsPanel.style.display = "none";
+            initMissedTrayView();
+        } else {
+            filterPanel.style.display = "block";
+            statsPanel.style.display = "grid";
+            
+            if (tabId === "flashcards") {
+                renderFlashcardView();
+            } else if (tabId === "quiz") {
+                showQuizSetup();
+            }
+        }
+    }
+
+    function setWordTypeFilter(type, element) {
+        setSelectedPill(element);
+        filterType = type;
+        applyFilters();
+    }
+
+    function setSelectedPill(el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.filter-pill:not(.setup-pill)').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function applyFilters() {
+        filteredPool = verbDatabase.filter(item => {
+            return (filterType === "all" || item.type === filterType);
+        });
+
+        activeCardIndex = 0;
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        
+        updateGlobalStatsDashboard();
+
+        if (currentTab === "flashcards") {
+            renderFlashcardView();
+        } else if (currentTab === "quiz") {
+            showQuizSetup();
+        }
+    }
+    
+    function shuffleDeck() {
+        if (filteredPool.length === 0) return;
+        for (let i = filteredPool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredPool[i], filteredPool[j]] = [filteredPool[j], filteredPool[i]];
+        }
+        activeCardIndex = 0;
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        updateGlobalStatsDashboard();
+        renderFlashcardView();
+    }
+
+    function resetSession() {
+        totalReviewedCount = 0;
+        knewItCount = 0;
+        missedArray = [];
+        currentMissedIndex = 0;
+        applyFilters();
+    }
+
+    function updateGlobalStatsDashboard() {
+        document.getElementById("stat-reviewed").innerText = `${totalReviewedCount}/${filteredPool.length}`;
+        document.getElementById("stat-knew").innerText = knewItCount;
+        document.getElementById("stat-missed-count").innerText = missedArray.length;
+    }
+
+    // --- FLASHCARD LOGIC ---
+    function renderFlashcardView() {
+        const deckContainer = document.getElementById("fc-deck-container");
+        const emptyState = document.getElementById("fc-empty-state");
+        const completedState = document.getElementById("fc-completed-state");
+        
+        if (completedState) completedState.style.display = "none";
+        if (filteredPool.length === 0) {
+            deckContainer.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+        if (totalReviewedCount >= filteredPool.length) {
+            deckContainer.style.display = "none";
+            emptyState.style.display = "none";
+            completedState.style.display = "block";
+            return;
+        }
+
+        deckContainer.style.display = "block";
+        emptyState.style.display = "none";
+
+        const item = filteredPool[activeCardIndex];
+        document.getElementById("fc-anim-target").classList.remove("flipped");
+
+        document.getElementById("fc-tag-type").innerText = item.type;
+        document.getElementById("fc-tag-type").className = `tag ${item.type}`;
+        document.getElementById("fc-tag-type-b").innerText = item.type;
+        document.getElementById("fc-tag-type-b").className = `tag ${item.type}`;
+
+        document.getElementById("fc-front-text").innerText = item.inf;
+        document.getElementById("fc-meaning-text").innerText = item.meaning;
+        document.getElementById("fc-back-title").innerText = item.inf;
+        document.getElementById("fc-back-meaning").innerText = item.meaning;
+
+        // Populate paradigms
+        buildConjugationGrid(document.getElementById("fc-conjugation-grid"), item.forms);
+        buildPastRow(document.getElementById("fc-past-row"), item.past);
+    }
+
+    function buildConjugationGrid(container, forms) {
+        container.innerHTML = "";
+        for (const [subj, val] of Object.entries(forms)) {
+            const block = document.createElement("div");
+            block.className = "conj-item";
+            block.innerHTML = `<div class="pronoun">${pronounsLabelMap[subj]}</div><div class="form-val">${val}</div>`;
+            container.appendChild(block);
+        }
+    }
+
+    function buildPastRow(container, past) {
+        container.innerHTML = `
+            <div class="past-box"><div class="past-lbl">Präteritum</div><div class="past-val">${past.praet}</div></div>
+            <div class="past-box"><div class="past-lbl">Partizip II</div><div class="past-val">${past.part}</div></div>
+        `;
+    }
+
+    function flipCard() {
+        document.getElementById("fc-anim-target").classList.toggle("flipped");
+    }
+
+    function advanceDeckNextPointer() {
+        if (filteredPool.length === 0) return;
+        if (totalReviewedCount < filteredPool.length) totalReviewedCount++;
+        updateGlobalStatsDashboard();
+
+        if (totalReviewedCount >= filteredPool.length) {
+            document.getElementById("fc-deck-container").style.display = "none";
+            document.getElementById("fc-completed-state").style.display = "block";
+            return;
+        }
+        activeCardIndex = (activeCardIndex + 1) % filteredPool.length;
+        renderFlashcardView();
+    }
+
+    function markCardKnew() {
+        if (totalReviewedCount < filteredPool.length) knewItCount++;
+        advanceDeckNextPointer();
+    }
+
+    function markCardMissed() {
+        const currentItem = filteredPool[activeCardIndex];
+        if (!missedArray.some(item => item.inf === currentItem.inf)) {
+            missedArray.push(currentItem);
+        }
+        advanceDeckNextPointer();
+    }
+
+    // --- QUIZ LOGIC ---
+    function selectQuizLength(length, element) {
+        selectedQuizLength = length;
+        const parent = element.parentElement;
+        parent.querySelectorAll('.setup-pill').forEach(p => p.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function showQuizSetup() {
+        document.getElementById("quiz-game-container").style.display = "none";
+        document.getElementById("quiz-header").style.display = "none";
+        document.getElementById("quiz-summary-container").style.display = "none";
+        
+        const setupContainer = document.getElementById("quiz-setup-container");
+        const emptyState = document.getElementById("quiz-empty-state");
+
+        if (filteredPool.length === 0) {
+            setupContainer.style.display = "none";
+            if (emptyState) emptyState.style.display = "block";
+        } else {
+            if (emptyState) emptyState.style.display = "none";
+            setupContainer.style.display = "block";
+        }
+    }
+
+    function startNewQuiz() {
+        quizPool = [...filteredPool].sort(() => Math.random() - 0.5);
+        if (selectedQuizLength === 'all') {
+            quizMaxQuestions = quizPool.length;
+        } else {
+            quizMaxQuestions = Math.min(selectedQuizLength, quizPool.length);
+        }
+        quizSessionCount = 0;
+        quizCurrentScore = 0;
+        quizMistakes = [];
+        launchQuizUI();
+    }
+
+    function startMistakesQuiz() {
+        quizPool = quizMistakes.map(m => m.item).sort(() => Math.random() - 0.5);
+        quizMaxQuestions = quizPool.length;
+        quizSessionCount = 0;
+        quizCurrentScore = 0;
+        quizMistakes = [];
+        launchQuizUI();
+    }
+
+    function launchQuizUI() {
+        document.getElementById("quiz-setup-container").style.display = "none";
+        document.getElementById("quiz-summary-container").style.display = "none";
+        document.getElementById("quiz-game-container").style.display = "block";
+        document.getElementById("quiz-header").style.display = "flex";
+        initQuizQuestion();
+    }
+
+    function initQuizQuestion() {
+        if (quizSessionCount >= quizMaxQuestions) {
+            showQuizSummary();
+            return;
+        }
+
+        quizSessionCount++;
+        document.getElementById("quiz-progress").innerText = `Question ${quizSessionCount} / ${quizMaxQuestions}`;
+        document.getElementById("quiz-score-display").innerText = `Score: ${quizCurrentScore}`;
+        document.getElementById("quiz-next-btn").style.display = "none";
+
+        quizActiveItem = quizPool[quizSessionCount - 1];
+        
+        // Randomly choose subject, präteritum, or partizip II for evaluation
+        const optionsKeys = ['ich', 'du', 'er', 'wir', 'ihr', 'sie', 'praet', 'part'];
+        const chosenKey = optionsKeys[Math.floor(Math.random() * optionsKeys.length)];
+        quizActiveSubject = chosenKey;
+
+        let questionLabel = "";
+        let correctValue = "";
+
+        if (['praet', 'part'].includes(chosenKey)) {
+            questionLabel = chosenKey === 'praet' ? "Präteritum" : "Partizip II";
+            correctValue = quizActiveItem.past[chosenKey];
+        } else {
+            questionLabel = pronounsLabelMap[chosenKey];
+            correctValue = quizActiveItem.forms[chosenKey];
+        }
+
+        document.getElementById("quiz-prompt-text").innerHTML = `${quizActiveItem.inf} <span style="color:var(--text-muted); font-size:0.85em;">(${questionLabel})</span>`;
+
+        let options = [correctValue];
+        
+        // SMART OPTIONS GENERATION: Pull choices from the SAME verb structure to make it challenging
+        let nativeAlternatives = [];
+        if (['praet', 'part'].includes(chosenKey)) {
+            nativeAlternatives = [quizActiveItem.past.praet, quizActiveItem.past.part];
+            // Supplement with alternative values from a couple other random verbs if necessary
+            verbDatabase.slice().sort(() => Math.random() - 0.5).forEach(v => {
+                if(v.inf !== quizActiveItem.inf) {
+                    nativeAlternatives.push(v.past.praet);
+                    nativeAlternatives.push(v.past.part);
+                }
+            });
+        } else {
+            nativeAlternatives = Object.values(quizActiveItem.forms);
+            // Supplement with forms from another random verb to fill options if duplicates exist
+            verbDatabase.slice().sort(() => Math.random() - 0.5).forEach(v => {
+                if(v.inf !== quizActiveItem.inf) {
+                    nativeAlternatives.push(v.forms[chosenKey]);
+                }
+            });
+        }
+
+        for (let i = 0; i < nativeAlternatives.length && options.length < 4; i++) {
+            if (nativeAlternatives[i] && !options.includes(nativeAlternatives[i])) {
+                options.push(nativeAlternatives[i]);
+            }
+        }
+        
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsBox = document.getElementById("quiz-options");
+        optionsBox.innerHTML = "";
+
+        options.forEach(opt => {
+            const button = document.createElement("button");
+            button.className = "quiz-opt";
+            button.innerText = opt;
+            button.onclick = () => handleQuizSelection(button, opt, correctValue);
+            optionsBox.appendChild(button);
+        });
+    }
+
+    function handleQuizSelection(selectedBtn, chosenValue, correctValue) {
+        const allButtons = document.querySelectorAll("#quiz-options .quiz-opt");
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (chosenValue === correctValue) {
+            selectedBtn.classList.add("correct");
+            quizCurrentScore++;
+            document.getElementById("quiz-score-display").innerText = `Score: ${quizCurrentScore}`;
+        } else {
+            selectedBtn.classList.add("wrong");
+            allButtons.forEach(btn => {
+                if (btn.innerText === correctValue) btn.classList.add("correct");
+            });
+
+            let displayKey = ['praet', 'part'].includes(quizActiveSubject) ? (quizActiveSubject === 'praet' ? "Präteritum" : "Partizip II") : pronounsLabelMap[quizActiveSubject];
+            quizMistakes.push({
+                item: quizActiveItem,
+                prompt: `${quizActiveItem.inf} (${displayKey})`,
+                userAns: chosenValue,
+                correctAns: correctValue
+            });
+
+            if (!missedArray.some(m => m.inf === quizActiveItem.inf)) {
+                missedArray.push(quizActiveItem);
+                updateGlobalStatsDashboard();
+            }
+        }
+        document.getElementById("quiz-next-btn").style.display = "block";
+    }
+
+    function showQuizSummary() {
+        document.getElementById("quiz-game-container").style.display = "none";
+        document.getElementById("quiz-header").style.display = "none";
+        
+        const summaryContainer = document.getElementById("quiz-summary-container");
+        summaryContainer.style.display = "block";
+        document.getElementById("quiz-final-score").innerText = `You scored ${quizCurrentScore} out of ${quizMaxQuestions}!`;
+
+        const mistakesList = document.getElementById("quiz-mistakes-list");
+        const retakeBtn = document.getElementById("quiz-retake-btn");
+        
+        if (quizMistakes.length === 0) {
+            mistakesList.innerHTML = "<div style='color:#10b981; font-weight:800; padding:20px; background:#dcfce7; border-radius:12px; border:2px solid #86efac;'>Perfect score! Keine Fehler. 🌟</div>";
+            retakeBtn.style.display = "none";
+        } else {
+            let html = "<h3 style='color:#e11d48; font-size:1.1em; margin-bottom:5px; text-align:left;'>Review Panel:</h3>";
+            quizMistakes.forEach(m => {
+                html += `
+                <div class="mistake-card">
+                    <div class="mistake-word">${m.prompt}</div>
+                    <div class="mistake-wrong">❌ Your Choice: <strong>${m.userAns}</strong></div>
+                    <div class="mistake-correct">✅ Correct: ${m.correctAns}</div>
+                </div>`;
+            });
+            mistakesList.innerHTML = html;
+            retakeBtn.style.display = "block";
+        }
+    }
+
+    // --- SPEED ROUND LOGIC ---
+    function resetSpeedRoundUI() {
+        document.getElementById("speed-start-panel").style.display = "block";
+        document.getElementById("speed-game-panel").style.display = "none";
+    }
+
+    function startSpeedRound() {
+        document.getElementById("speed-start-panel").style.display = "none";
+        document.getElementById("speed-game-panel").style.display = "block";
+
+        speedTimeLeft = 30;
+        speedScoreValue = 0;
+        document.getElementById("speed-score").innerText = speedScoreValue;
+        document.getElementById("speed-timer").innerText = speedTimeLeft;
+
+        processNextSpeedItem();
+
+        speedTimerInterval = setInterval(() => {
+            speedTimeLeft--;
+            document.getElementById("speed-timer").innerText = speedTimeLeft;
+            if (speedTimeLeft <= 0) {
+                clearInterval(speedTimerInterval);
+                concludeSpeedSession();
+            }
+        }, 1000);
+    }
+
+    function processNextSpeedItem() {
+        if (verbDatabase.length === 0) return;
+        
+        speedCurrentWord = verbDatabase[Math.floor(Math.random() * verbDatabase.length)];
+        const keys = ['ich', 'du', 'er', 'wir', 'ihr', 'sie', 'praet', 'part'];
+        speedCurrentSubject = keys[Math.floor(Math.random() * keys.length)];
+
+        let questionLabel = ['praet', 'part'].includes(speedCurrentSubject) ? (speedCurrentSubject === 'praet' ? "Präteritum" : "Partizip II") : pronounsLabelMap[speedCurrentSubject];
+        let correctValue = ['praet', 'part'].includes(speedCurrentSubject) ? speedCurrentWord.past[speedCurrentSubject] : speedCurrentWord.forms[speedCurrentSubject];
+
+        document.getElementById("speed-prompt-text").innerHTML = `${speedCurrentWord.inf} <span style="font-size:0.85em; color:var(--text-muted);">(${questionLabel})</span>`;
+
+        let options = [correctValue];
+        
+        // SMART SPEED OPTIONS GENERATION: Pull alternative forms of the same word
+        let nativeAlternatives = [];
+        if (['praet', 'part'].includes(speedCurrentSubject)) {
+            nativeAlternatives = [speedCurrentWord.past.praet, speedCurrentWord.past.part];
+            verbDatabase.slice().sort(() => Math.random() - 0.5).forEach(v => {
+                if(v.inf !== speedCurrentWord.inf) {
+                    nativeAlternatives.push(v.past.praet);
+                    nativeAlternatives.push(v.past.part);
+                }
+            });
+        } else {
+            nativeAlternatives = Object.values(speedCurrentWord.forms);
+            verbDatabase.slice().sort(() => Math.random() - 0.5).forEach(v => {
+                if(v.inf !== speedCurrentWord.inf) {
+                    nativeAlternatives.push(v.forms[speedCurrentSubject]);
+                }
+            });
+        }
+
+        for (let i = 0; i < nativeAlternatives.length && options.length < 4; i++) {
+            if (nativeAlternatives[i] && !options.includes(nativeAlternatives[i])) {
+                options.push(nativeAlternatives[i]);
+            }
+        }
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsContainer = document.getElementById("speed-options");
+        optionsContainer.innerHTML = "";
+
+        options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-opt";
+            btn.innerText = opt;
+            btn.onclick = () => evaluateSpeedSelection(btn, opt, correctValue);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function evaluateSpeedSelection(selectedBtn, chosenValue, correctValue) {
+        const allButtons = document.querySelectorAll("#speed-options .quiz-opt");
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (chosenValue === correctValue) {
+            selectedBtn.classList.add("correct");
+            speedScoreValue += 2; 
+        } else {
+            selectedBtn.classList.add("wrong");
+            allButtons.forEach(btn => {
+                if (btn.innerText === correctValue) btn.classList.add("correct");
+            });
+            speedTimeLeft = Math.max(0, speedTimeLeft - 3);
+            document.getElementById("speed-timer").innerText = speedTimeLeft;
+        }
+
+        document.getElementById("speed-score").innerText = speedScoreValue;
+        setTimeout(() => { if (speedTimeLeft > 0) processNextSpeedItem(); }, 600);
+    }
+
+    function concludeSpeedSession() {
+        alert(`🏁 Session Complete! Total Speed Score: ${speedScoreValue}`);
+        resetSpeedRoundUI();
+    }
+
+    // --- MISSED TRAY LOGIC ---
+    function initMissedTrayView() {
+        const container = document.getElementById("missed-deck-container");
+        const emptyState = document.getElementById("missed-empty-state");
+
+        if (missedArray.length === 0) {
+            container.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        container.style.display = "block";
+        emptyState.style.display = "none";
+        currentMissedIndex = 0;
+        renderMissedCardItem();
+    }
+
+    function renderMissedCardItem() {
+        if (missedArray.length === 0) {
+            initMissedTrayView();
+            return;
+        }
+        if (currentMissedIndex >= missedArray.length) currentMissedIndex = 0;
+        
+        const item = missedArray[currentMissedIndex];
+        document.getElementById("missed-anim-target").classList.remove("flipped");
+
+        document.getElementById("m-tag-type").innerText = item.type;
+        document.getElementById("m-tag-type").className = `tag ${item.type}`;
+        document.getElementById("m-tag-type-b").innerText = item.type;
+        document.getElementById("m-tag-type-b").className = `tag ${item.type}`;
+
+        document.getElementById("m-front-text").innerText = item.inf;
+        document.getElementById("m-meaning-text").innerText = item.meaning;
+        document.getElementById("m-back-title").innerText = item.inf;
+        document.getElementById("m-back-meaning").innerText = item.meaning;
+
+        buildConjugationGrid(document.getElementById("m-conjugation-grid"), item.forms);
+        buildPastRow(document.getElementById("m-past-row"), item.past);
+    }
+
+    function flipMissedCard() {
+        document.getElementById("missed-anim-target").classList.toggle("flipped");
+    }
+
+    function nextMissedCard() {
+        if (missedArray.length === 0) return;
+        currentMissedIndex = (currentMissedIndex + 1) % missedArray.length;
+        renderMissedCardItem();
+    }
+
+    function clearFromMissed() {
+        if (missedArray.length === 0) return;
+        missedArray.splice(currentMissedIndex, 1);
+        updateGlobalStatsDashboard();
+        renderMissedCardItem();
+    }
+</script>
+</body>
+</html>

@@ -41,8 +41,9 @@
         <p id="subtitle" class="text-slate-600 font-bold text-lg">Wähle dein Sprachniveau</p>
     </div>
 
+    <!-- MAIN LEVEL SELECTION -->
     <div id="level-selection" class="w-full max-w-md mx-auto flex flex-col space-y-5 pb-12">
-        <button onclick="showChapters('a1')" class="group p-5 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl border-2 border-emerald-200 hover:border-emerald-400 transition-all duration-300 flex items-center text-left shadow-md hover:shadow-xl hover:-translate-y-1">
+        <button onclick="showA1Options()" class="group p-5 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl border-2 border-emerald-200 hover:border-emerald-400 transition-all duration-300 flex items-center text-left shadow-md hover:shadow-xl hover:-translate-y-1">
             <div class="w-16 h-16 bg-white/60 rounded-2xl flex items-center justify-center text-4xl mr-5 shadow-sm group-hover:scale-110 transition-transform duration-300">🌱</div>
             <div>
                 <h2 class="text-2xl font-extrabold text-teal-900 mb-1">A1 Niveau</h2>
@@ -59,10 +60,37 @@
         </button>
     </div>
 
-    <div id="a1-chapters" class="w-full max-w-md mx-auto hidden flex-col space-y-4 pb-12">
+    <!-- NEW: A1 SUB-SELECTION OPTIONS -->
+    <div id="a1-options" class="w-full max-w-md mx-auto hidden flex-col space-y-5 pb-12">
         <button onclick="showLevels()" class="self-start mb-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full flex items-center text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Zurück zur Übersicht
+        </button>
+
+        <!-- Option 1: Standard Chapters -->
+        <button onclick="showChapters('a1')" class="group p-5 bg-gradient-to-br from-sky-100 to-blue-100 rounded-3xl border-2 border-sky-200 hover:border-sky-400 transition-all duration-300 flex items-center text-left shadow-md hover:shadow-xl hover:-translate-y-1">
+            <div class="w-16 h-16 bg-white/60 rounded-2xl flex items-center justify-center text-4xl mr-5 shadow-sm group-hover:scale-110 transition-transform duration-300">📖</div>
+            <div>
+                <h2 class="text-2xl font-extrabold text-sky-900 mb-1">Kapitel 1 - 12</h2>
+                <p class="text-sky-700 text-sm font-bold">Wortschatz & Flashcards nach Thema</p>
+            </div>
+        </button>
+
+        <!-- Option 2: Conjugation Practice -->
+        <a href="a1-conjugations.html" class="group p-5 bg-gradient-to-br from-amber-100 to-orange-100 rounded-3xl border-2 border-amber-200 hover:border-amber-400 transition-all duration-300 flex items-center text-left shadow-md hover:shadow-xl hover:-translate-y-1">
+            <div class="w-16 h-16 bg-white/60 rounded-2xl flex items-center justify-center text-4xl mr-5 shadow-sm group-hover:scale-110 transition-transform duration-300">⚙️</div>
+            <div>
+                <h2 class="text-2xl font-extrabold text-amber-900 mb-1">A1 Conjugation Practice</h2>
+                <p class="text-amber-700 text-sm font-bold">Verbkonjugation trainieren</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- A1 CHAPTERS LIST -->
+    <div id="a1-chapters" class="w-full max-w-md mx-auto hidden flex-col space-y-4 pb-12">
+        <button onclick="showA1Options()" class="self-start mb-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full flex items-center text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Zurück zu A1 Optionen
         </button>
         
         <a href="a1-chapter1.html" class="p-4 bg-blue-50 rounded-2xl border-2 border-blue-200 hover:bg-blue-100 flex items-center justify-between group transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
@@ -115,6 +143,7 @@
         </a>
     </div>
 
+    <!-- A2 CHAPTERS LIST -->
     <div id="a2-chapters" class="w-full max-w-md mx-auto hidden flex-col space-y-4 pb-12">
         <button onclick="showLevels()" class="self-start mb-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full flex items-center text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -173,6 +202,7 @@
 
     <script>
         const levelView = document.getElementById('level-selection');
+        const a1OptionsView = document.getElementById('a1-options');
         const views = {
             'a1': document.getElementById('a1-chapters'),
             'a2': document.getElementById('a2-chapters')
@@ -180,25 +210,38 @@
         const subtitle = document.getElementById('subtitle');
 
         const titles = {
+            'options': 'A1: Wähle eine Übungsmethode',
             'a1': 'A1 Flashcards: Wähle ein Kapitel',
             'a2': 'A2 Flashcards: Wähle ein Kapitel'
         };
 
-        function showLevels() {
+        function hideAllViews() {
+            levelView.classList.add('hidden');
+            levelView.classList.remove('flex');
+            a1OptionsView.classList.add('hidden');
+            a1OptionsView.classList.remove('flex');
             Object.values(views).forEach(view => {
                 view.classList.add('hidden');
                 view.classList.remove('flex');
             });
-            
+        }
+
+        function showLevels() {
+            hideAllViews();
             levelView.classList.remove('hidden');
             levelView.classList.add('flex');
             subtitle.innerText = "Wähle dein Sprachniveau";
         }
 
-        function showChapters(level) {
-            levelView.classList.add('hidden');
-            levelView.classList.remove('flex');
+        function showA1Options() {
+            hideAllViews();
+            a1OptionsView.classList.remove('hidden');
+            a1OptionsView.classList.add('flex');
+            subtitle.innerText = titles['options'];
+        }
 
+        function showChapters(level) {
+            hideAllViews();
             if (views[level]) {
                 views[level].classList.remove('hidden');
                 views[level].classList.add('flex');
